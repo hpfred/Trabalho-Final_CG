@@ -92,23 +92,78 @@ main();
 function animate(now){
   now *= 0.001;
   var then = now;
-  requestAnimationFrame(animate2);
+  var rot1 = 38, rot2 = 55, trans1 = -50;
+  var aniSpeed = 5;
+
+  requestAnimationFrame(aniRot1);
+  if(config.rotateX==rot1)
+    requestAnimationFrame(aniTrans1);
+  if(config.TransX==trans1)
+    requestAnimationFrame(aniRot2);
   
-  function animate2(now){
+  function aniRot1(now){
     now *= 0.001;
     var dTime = now - then;
     then = now;
-    if(config.rotateX<20){
-      config.rotateX += dTime;
-      if(config.rotateX<20)
-        requestAnimationFrame(animate2);
-      else config.rotateX = 20;
+    if(config.rotateX<rot1){
+      config.rotateX += dTime*aniSpeed;
+      if(config.rotateX<rot1)
+      requestAnimationFrame(aniRot1);
+      else{
+        config.rotateX = rot1;
+        requestAnimationFrame(aniTrans1);
+      }
     }
-    else if(config.rotateX>20){
-      config.rotateX -= dTime;
-      if(config.rotateX>20)
-        requestAnimationFrame(animate2);
-      else config.rotateX = 20;
+    else if(config.rotateX>rot1){
+      config.rotateX -= dTime*aniSpeed;
+      if(config.rotateX>rot1)
+      requestAnimationFrame(aniRot1);
+      else{
+        config.rotateX = rot1;
+        requestAnimationFrame(aniTrans1);
+      }
+    }
+  }
+  
+  function aniTrans1(now){
+    now *= 0.001;
+    var dTime = now - then;
+    then = now;
+    if(config.TransX<trans1){
+      config.TransX += dTime*aniSpeed;
+      if(config.TransX<trans1)
+      requestAnimationFrame(aniTrans1);
+      else{
+        config.TransX = trans1;
+        requestAnimationFrame(aniRot2);
+      }
+    }
+    else if(config.TransX>trans1){
+      config.TransX -= dTime*aniSpeed;
+      if(config.TransX>trans1)
+      requestAnimationFrame(aniTrans1);
+      else{
+        config.TransX = trans1;
+        requestAnimationFrame(aniRot2);
+      }
+    }
+  }
+
+  function aniRot2(now){
+    now *= 0.001;
+    var dTime = now - then;
+    then = now;
+    if(config.rotateY<rot2){
+      config.rotateY += dTime*aniSpeed;
+      if(config.rotateY<rot2)
+        requestAnimationFrame(aniRot2);
+      else config.rotateY = rot2;
+    }
+    else if(config.rotateY>rot2){
+      config.rotateY -= dTime*aniSpeed;
+      if(config.rotateY>rot2)
+        requestAnimationFrame(aniRot2);
+      else config.rotateY = rot2;
     }
   }
 }
