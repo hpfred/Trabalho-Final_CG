@@ -89,21 +89,6 @@ function main() {
 
 main();
 
-// var then = 0;
-// function animate(now){
-//   now *= 0.001;
-//   var dTime = now - then;
-//   then = now;
-//   if(config.rotateX<20){
-  //     config.rotateX += dTime;
-  //     requestAnimationFrame(animate);
-  //   }
-  //}
-  
-  //var then = 100000;
-  //now-then resulta em um dTime maior quanto mais tempo decorreu antes da execucao da funcao, 
-  //inicializar then com valor alto garante que a primeira execução/frame não 
-  
 function animate(now){
   now *= 0.001;
   var then = now;
