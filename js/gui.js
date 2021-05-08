@@ -5,10 +5,9 @@ var config = {  rotateX: 0,
                 TransX: 0,
                 TransY: 0,
                 TransZ: 0,
-                //buttonTst: true,
+                //chckBoxTst: true,
                 animate: function() {
                   requestAnimationFrame(animate);
-                  //animate();
                 }
 };
 //var configCam

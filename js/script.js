@@ -14,14 +14,16 @@ function main() {
   var fieldOfViewRadians = degToRad(60);
 
   const cubeUniforms = {
-    u_colorMult: [0.5, 0.5, 1, 1],//[1, 0.5, 0.5, 1],
+    u_colorMult: [0.5, 0.5, 1, 1],  //[1, 0.5, 0.5, 1],
     u_matrix: m4.identity(),
   };
 
-  function computeMatrix(viewProjectionMatrix, translation, yRotation, xRotation, scale, TransX, TransY, TransZ) {
-    xRotation = xRotation*0.063;      //0-360
-    yRotation = yRotation*0.063;
-    scale = (scale*0.027)+0.2;        //scale = (scale*0.03024)+0.126;
+  function computeMatrix(viewProjectionMatrix, translation, xRotation, yRotation, zRotation, scale, TransX, TransY, TransZ) {
+    //xRotation = xRotation*0.063;      //0-360
+    xRotation = degToRad(xRotation*3.6);
+    yRotation = degToRad(yRotation*3.6);
+    zRotation = degToRad(zRotation*3.6);
+    scale = (scale*0.027)+0.2;
 
     var matrix = m4.translate(
       viewProjectionMatrix,
@@ -32,7 +34,8 @@ function main() {
     //axisRotate
     var scl = m4.scale(matrix, scale, scale, scale);
     var xRot = m4.xRotate(scl, xRotation);
-    return m4.yRotate(xRot, yRotation);
+    var yRot = m4.yRotate(xRot, yRotation);
+    return m4.zRotate(yRot, zRotation);
   }
   
   loadGUI();
@@ -69,8 +72,9 @@ function main() {
     cubeUniforms.u_matrix = computeMatrix(
       viewProjectionMatrix,
       cubeTranslation,
-      config.rotateY,
       config.rotateX,
+      config.rotateY,
+      config.rotateZ,
       config.scale,
       config.TransX,
       config.TransY,
@@ -89,6 +93,8 @@ function main() {
 
 main();
 
+//Devido ao paralelismo(?) quanto mais vezes o botao que chama funcao animate e clicado, mais rapido a animacao e executada
+//A velocidade e incrementada devido a tecnica usada para manter o tempo de execucao constante
 function animate(now){
   now *= 0.001;
   var then = now;
