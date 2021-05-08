@@ -8,7 +8,14 @@ var config = {  rotateX: 0,
                 //chckBoxTst: true,
                 animate: function() {
                   requestAnimationFrame(animate);
-                }
+                },
+                addModel: function() {
+                  this.addModel();
+                },
+                removeModel: function() {
+                  this.removeModel();
+                },
+
 };
 //var configCam
 
@@ -33,8 +40,9 @@ const loadGUI = () => {
   guiMod.add(config, "scale", 0, 100, 0.1).listen();  
     ///Calls function that plays animation
   guiMod.add(config, "animate"); 
-    ///Calls function that creates new model
-  //gui.add(config, "newMod");
+    ///Calls function that creates and destroys new model new model
+  guiMod.add(config, "addModel");
+  guiMod.add(config, "removeModel");
 
     ///Interface for camera transformations
   var guiCam = gui.addFolder("Camera");
