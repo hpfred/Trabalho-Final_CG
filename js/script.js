@@ -52,13 +52,13 @@ function main() {
   //*/
 
   //var objects = [cubeMain, cube1, cube2, ];
-  var objects = [cubeMain, cube1, ];
+  //var objects = [cubeMain, cube1, ];
   //var objectsToDraw = [cube1.drawInfo, cube2.drawInfo, ];
   var objectsToDraw = [cube1.drawInfo, ];
   
+  var nCubes = 1;
   //Additional cubes
   /*
-  var nCubes = 1;
   function addModel(){
     if(nCubes==1){
       nCubes++;
@@ -98,6 +98,31 @@ function main() {
     }
   }
   //*/
+  var cube2 = new Node();
+  //cube2.localMatrix = m4.translation(30, 0, 0);
+  cube2.drawInfo = {
+    uniforms: {
+      u_colorMult: [0.5, 0.5, 1, 1],
+    },
+    programInfo: programInfo,
+    bufferInfo: cubeBufferInfo,
+    vertexArray: cubeVAO,
+  };
+  cube2.setParent(cubeMain);
+  var cube3 = new Node();
+  cube3.localMatrix = m4.translation(-30, 0, 0);
+  cube3.drawInfo = {
+    uniforms: {
+      u_colorMult: [0.5, 0.5, 1, 1],
+    },
+    programInfo: programInfo,
+    bufferInfo: cubeBufferInfo,
+    vertexArray: cubeVAO,
+  };
+  cube3.setParent(cubeMain);
+
+  var objects = [cubeMain, cube1, cube2, cube3];
+  //var objectsToDraw = [cube1.drawInfo, cube2.drawInfo, cube3.drawInfo];
 
   /*
   function computeMatrix(viewProjectionMatrix, xRotation, yRotation, zRotation, scale, TransX, TransY, TransZ) {
@@ -209,15 +234,37 @@ function main() {
     );
     //*/
     
-    if(nCubes>=2){
+    //*
+    //if(nCubes>=2){
       cube2.localMatrix = m4.translate(cube2.localMatrix, 30, 0, 0);
-    }
-    /*
-    if(nCubes==3){
+    //}
+    //if(nCubes==3){
       //cube2.localMatrix = m4.translate(cube2.localMatrix, 30, 0, 0);
       cube3.localMatrix = m4.translate(cube3.localMatrix, -30, 0, 0);
-    }
+    //}
     //*/
+    if(add1){
+      if(nCubes==2){
+        objectsToDraw.push(cube3.drawInfo);
+        nCubes++;
+      }
+      if(nCubes==1){
+        objectsToDraw.push(cube2.drawInfo);
+        nCubes++;
+      }
+      add1=false;
+    }
+    if(rmv1){
+      if(nCubes==2){
+        objectsToDraw.pop();
+        nCubes--;
+      }
+      if(nCubes==3){
+        objectsToDraw.pop();
+        nCubes--;
+      }
+      rmv1=false;
+    }
 
     cubeMain.updateWorldMatrix();
 
@@ -236,7 +283,15 @@ function main() {
 
 main();
 
-//*
+var add1=false;
+var rmv1=false;
+function addModel(){
+  add1 = true;
+}
+function rmvModel(){
+  rmv1 = true;
+}
+/*
 var nCubes = 1;
 function addModel(){
   if(nCubes==1){

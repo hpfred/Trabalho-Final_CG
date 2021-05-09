@@ -10,12 +10,11 @@ var config = {  rotateX: 0,
                   requestAnimationFrame(animate);
                 },
                 addModel: function() {
-                  main.addModel();
+                  addModel();
                 },
                 removeModel: function() {
-                  main.removeModel();
+                  rmvModel();
                 },
-
 };
 //var configCam
 
@@ -24,6 +23,7 @@ const loadGUI = () => {
   
     ///Interface for model transformations
   var guiMod = gui.addFolder("Model");
+  guiMod.open();
     ///Folders for linear and curve translations
   var guiModTrans = guiMod.addFolder("Translation");
   var guiModTransLin = guiModTrans.addFolder("Linear");
@@ -33,10 +33,11 @@ const loadGUI = () => {
   //guiTransCur
     ///Folder for axis rotation
   var guiModRot = guiMod.addFolder("Rotate");
+  //guitRotAxis
   guiModRot.add(config, "rotateX", 0, 100, 0.1).listen();  //guiRotAxis?
   guiModRot.add(config, "rotateY", 0, 100, 0.1).listen();
   guiModRot.add(config, "rotateZ", 0, 100, 0.1).listen();
-  //guiRotPt
+  //rotate point
   guiMod.add(config, "scale", 0, 100, 0.1).listen();  
     ///Calls function that plays animation
   guiMod.add(config, "animate"); 
