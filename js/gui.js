@@ -10,10 +10,10 @@ var config = {  rotateX: 0,
                   requestAnimationFrame(animate);
                 },
                 addModel: function() {
-                  this.addModel();
+                  main.addModel();
                 },
                 removeModel: function() {
-                  this.removeModel();
+                  main.removeModel();
                 },
 
 };
