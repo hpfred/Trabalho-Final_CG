@@ -16,7 +16,20 @@ var config = {  rotateX: 0,
                   rmvModel();
                 },
 };
-//var configCam
+var configCam = { rotateX: 0,
+                  rotateY: 0,
+                  rotateZ: 0,
+                  //scale: 30,
+                  TransX: 0,
+                  TransY: 0,
+                  TransZ: 100,
+                  lookAtPoint: false,
+                  lookAtModel: false,
+                  animate: function() {
+                    requestAnimationFrame(animateCam);
+                  },
+                  //chooseCam
+};
 
 const loadGUI = () => {
   const gui = new dat.GUI();
@@ -50,15 +63,24 @@ const loadGUI = () => {
     ///Folder for linear and curve translations
   var guiCamTrans = guiCam.addFolder("Translation");
   var guiCamTransLin = guiCamTrans.addFolder("Linear");
+  guiCamTransLin.add(configCam, "TransX", -50, 50, 0.1).listen();
+  guiCamTransLin.add(configCam, "TransY", -50, 50, 0.1).listen();
+  guiCamTransLin.add(configCam, "TransZ", -50, 50, 0.1).listen();
   //guiCamCur
     ///Folder for axis rotation
+  var guiCamRot = guiCam.addFolder("Rotate");
+  guiCamRot.add(configCam, "rotateX", 0, 100, 0.1).listen();
+  guiCamRot.add(configCam, "rotateY", 0, 100, 0.1).listen();
+  guiCamRot.add(configCam, "rotateZ", 0, 100, 0.1).listen();
   //point rotation
   //zoom
     ///Folder for look at
   //look at point
+  guiCam.add(configCam, "lookAtPoint").listen();
+  guiCam.add(configCam, "lookAtModel").listen();
   //look at model while moving
     ///Calls function that plays animation
-  //
+  guiCam.add(configCam, "animate"); 
     ///Allow selection between multiple cameras/Folder
   //guiCamSel
 };

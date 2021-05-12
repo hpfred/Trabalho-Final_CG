@@ -146,28 +146,22 @@ function main() {
   }
   //*/
   
-  //*
-  function computeMatrix1(localMatrix, scale, TransX, TransY, TransZ) {
+
+  /*
+  function computeMatrixCam1(cameraMatrix, xRotation, yRotation, zRotation, TransX, TransY, TransZ) {
+    //xRotation = xRotation*0.063;      //0-360
+    xRotation = degToRad(xRotation*3.6);
+    yRotation = degToRad(yRotation*3.6);
+    zRotation = degToRad(zRotation*3.6);
     scale = (scale*0.027)+0.2;
+
     var matrix = m4.translate(
-      localMatrix,
+      cameraMatrix,
       TransX,
       TransY,
       TransZ,
     );
-    return m4.scale(matrix, scale, scale, scale);
-  }
-  //*
-  function computeMatrix2(localMatrix, xRotation, yRotation, zRotation) {
-    xRotation = degToRad(xRotation*3.6);
-    yRotation = degToRad(yRotation*3.6);
-    zRotation = degToRad(zRotation*3.6);
-    var matrix = m4.translate(
-      localMatrix,
-      0,
-      0,
-      0,
-    );
+    //var scl = m4.scale(matrix, scale, scale, scale);
     var xRot = m4.xRotate(matrix, xRotation);
     var yRot = m4.yRotate(xRot, yRotation);
     return m4.zRotate(yRot, zRotation);
@@ -190,12 +184,41 @@ function main() {
     var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
     // Compute the camera's matrix using look at.
-    var cameraPosition = [0, 0, 100];
+    //var cameraPosition = [0, 0, 100];
+    var cameraPosition = [configCam.TransX, configCam.TransY, configCam.TransZ];
     //var cameraPosition = [0, -200, 0];
     var target = [0, 0, 0];
     var up = [0, 1, 0];
+    //var up = [configCam.rotateX, configCam.rotateY, configCam.rotateZ];
     //var up = [0, 0, 1];
-    var cameraMatrix = m4.lookAt(cameraPosition, target, up);
+    if(configCam.lookAtPoint==true){
+      var cameraMatrix = m4.lookAt(cameraPosition, target, up);
+      configCam.lookAtModel=false;
+    }
+    if(configCam.lookAtModel==true){
+      target = [config.TransX+0.001, 
+        config.TransY+0.001, 
+        config.TransZ*0];
+      var cameraMatrix = m4.lookAt(cameraPosition, target, up);
+    }
+    if(configCam.lookAtPoint==false && configCam.lookAtModel==false){
+      target = [configCam.TransX+0.001, configCam.TransY+0.001, configCam.TransZ*0];
+      var cameraMatrix = m4.lookAt(cameraPosition, target, up);
+      //var cameraMatrix = m4.translation(cameraPosition);
+    }
+
+    //Chama função pra usar GUI
+    /*
+    cameraMatrix = computeMatrixCam1(cameraMatrix,
+      configCam.rotateX,
+      configCam.rotateY,
+      configCam.rotateZ,
+      //config.scale,
+      configCam.TransX,
+      configCam.TransY,
+      configCam.TransZ,
+    );
+    //*/
 
     // Make a view matrix from the camera matrix.
     var viewMatrix = m4.inverse(cameraMatrix);
@@ -217,7 +240,8 @@ function main() {
     );
     //*/
 
-    //*
+    cubeMain.localMatrix = computeMatrix1(cubeMain.localMatrix);
+    /*
     cubeMain.localMatrix = computeMatrix1(
       cubeMain.localMatrix,
       config.scale,
@@ -225,8 +249,8 @@ function main() {
       config.TransY,
       config.TransZ,
     );
-    //*
-    cube1.localMatrix = computeMatrix2(
+    //*/
+    cube1.localMatrix = computeMatrix2(     //Mudar pra rotateZ afetar modelos adicionados?
       cube1.localMatrix,
       config.rotateX,
       config.rotateY,
@@ -283,14 +307,6 @@ function main() {
 
 main();
 
-var add1=false;
-var rmv1=false;
-function addModel(){
-  add1 = true;
-}
-function rmvModel(){
-  rmv1 = true;
-}
 /*
 var nCubes = 1;
 function addModel(){
