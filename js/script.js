@@ -268,11 +268,11 @@ function main() {
 
     cubeMain.updateWorldMatrix();
 
-     objects.forEach(function(object) {
+    objects.forEach(function(object) {
       object.drawInfo.uniforms.u_matrix = m4.multiply(viewProjectionMatrix, object.worldMatrix);
       object.localMatrix = m4.identity();
       //object.drawInfo.uniforms.u_matrix = object.worldMatrix;
-     });
+    });
      
     twgl.drawObjectList(gl, objectsToDraw);
 	requestAnimationFrame(render);
