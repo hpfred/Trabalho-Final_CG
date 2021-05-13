@@ -72,9 +72,9 @@ const loadGUI = () => {
   var guiCamRot = guiCam.addFolder("Rotate");
   var guiCamRotAxis = guiCamRot.addFolder("Axis");
   guiCamRotAxis.open();
-  guiCamRotAxis.add(configCam, "rotateX", 0, 100, 0.1).listen().name("X Axis");
-  guiCamRotAxis.add(configCam, "rotateY", 0, 100, 0.1).listen().name("Y Axis");
-  guiCamRotAxis.add(configCam, "rotateZ", 0, 100, 0.1).listen().name("Z Axis");
+  guiCamRotAxis.add(configCam, "rotateX", -50, 50, 0.1).listen().name("X Axis");
+  guiCamRotAxis.add(configCam, "rotateY", -50, 50, 0.1).listen().name("Y Axis");
+  guiCamRotAxis.add(configCam, "rotateZ", -50, 50, 0.1).listen().name("Z Axis");
   //guiCamRot.add(config, "rotateP", 0, 100, 0.1).listen().name("Point");
   //guiCam.add(config, "zoom", 0, 100, 0.1).listen().name("Zoom");
     ///Folder for look at

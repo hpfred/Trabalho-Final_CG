@@ -96,10 +96,6 @@ function computeMatrixCam1() {
   var cameraPosition = [configCam.TransX, configCam.TransY, transZ];
   var target = [0, 0, 0];
   var up = [0, 1, 0];
-  //var up = [configCam.rotateX, configCam.rotateY, configCam.rotateZ];
-  //var angleY = configCam.rotateY*0.01;
-  //var angleZ = configCam.rotateZ*0.01;
-  //var up = [angleX, angleY, 0];
   
   if(configCam.lookAtPoint==true){
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
@@ -110,17 +106,7 @@ function computeMatrixCam1() {
   }
   if(configCam.lookAtPoint==false && configCam.lookAtModel==false){
     target = [configCam.TransX+0.001, configCam.TransY+0.001, configCam.TransZ*0];
-    // var tx = -m4.dot([configCam.rotateX*3.6, 0, 0], target);
-    // var ty = -m4.dot([0, configCam.rotateY*3.6, 0], target);
-    // var tz = -m4.dot([0, 0, configCam.rotateZ*3.6], target);
-    //target = [tx, ty, tz];
-
-    //var angleX1 = Math.sin(degToRad(configCam.rotateX*3.6));
-    //var angleX2 = Math.cos(degToRad(configCam.rotateX*3.6));
-    //target = [configCam.TransX+0.001, (configCam.TransY)+0.001, 0];
-    //target = [angleX1,angleX2,0]);
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
-    //cameraMatrix = m4.translate(cameraMatrix,tx,ty,tz);
     cameraMatrix = m4.xRotate(cameraMatrix,degToRad(configCam.rotateX*3.6));
     cameraMatrix = m4.yRotate(cameraMatrix,degToRad(configCam.rotateY*3.6));
     cameraMatrix = m4.zRotate(cameraMatrix,degToRad(configCam.rotateZ*3.6));
