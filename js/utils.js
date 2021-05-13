@@ -88,8 +88,6 @@ function computeMatrix2(localMatrix) {
   var yRot = m4.yRotate(xRot, yRotation);
   return m4.zRotate(yRot, zRotation);
 }
-
-//*
 function computeMatrixCam1() {
   //var cameraPosition = [0, 0, 100];
   var transZ = configCam.TransZ*2;
@@ -114,7 +112,6 @@ function computeMatrixCam1() {
 
   return cameraMatrix;
 }
-//*/
 
 //Devido ao paralelismo(?) quanto mais vezes o botao que chama funcao animate e clicado, mais rapido a animacao e executada
 //A velocidade e incrementada devido a tecnica usada para manter o tempo de execucao constante
@@ -198,6 +195,150 @@ function animate(now){
 }
 
 function animateCam(now){
+  now *= 0.001;
+  var then = now;
+  var rot1 = -13.9, rot2 = 3, rot3 = -2.7;
+  var trans1 = -50, trans2 = 15.8;
+  var aniSpeed = 10;
+
+  // anitransX=-50
+  // aniRotY=-13.9
+  // aniRotX=3
+  // aniTransZ=15.8
+  // aniRotZ=-2.7
+
+  requestAnimationFrame(aniTrans1);
+  if(configCam.TransX==trans1)//
+    requestAnimationFrame(aniRot1);
+  else if(configCam.rotateY==rot1)//
+    requestAnimationFrame(aniRot2);
+  else if(configCam.rotateX==rot2)//
+    requestAnimationFrame(aniTrans2);
+  else if(configCam.TransZ==trans2)//
+    requestAnimationFrame(aniRot3);
+    
+  function aniTrans1(now){
+    now *= 0.001;
+    var dTime = now - then;
+    then = now;
+
+    if(configCam.TransX<trans1){
+      configCam.TransX += dTime*aniSpeed;
+      if(configCam.TransX<trans1)
+      requestAnimationFrame(aniTrans1);
+      else{
+        configCam.TransX = trans1;
+        requestAnimationFrame(aniRot1);
+      }
+    }
+    else if(configCam.TransX>trans1){
+      configCam.TransX -= dTime*aniSpeed;
+      if(configCam.TransX>trans1)
+      requestAnimationFrame(aniTrans1);
+      else{
+        configCam.TransX = trans1;
+        requestAnimationFrame(aniRot1);
+      }
+    }
+  }
+
+  function aniRot1(now){
+    now *= 0.001;
+    var dTime = now - then;
+    then = now;
+    
+    if(configCam.rotateY<rot1){
+      configCam.rotateY += dTime*aniSpeed;
+      if(configCam.rotateY<rot1)
+        requestAnimationFrame(aniRot1);
+      else{
+        configCam.rotateY = rot1;
+        requestAnimationFrame(aniRot2);
+      }
+    }
+    else if(configCam.rotateY>rot1){
+      configCam.rotateY -= dTime*aniSpeed;
+      if(configCam.rotateY>rot1)
+        requestAnimationFrame(aniRot1);
+      else{
+        configCam.rotateY = rot1;
+        requestAnimationFrame(aniRot2);
+      }
+    }
+  }
+  
+  function aniRot2(now){
+    now *= 0.001;
+    var dTime = now - then;
+    then = now;
+    
+    if(configCam.rotateX<rot2){
+      configCam.rotateX += dTime*aniSpeed;
+      if(configCam.rotateX<rot2)
+        requestAnimationFrame(aniRot2);
+      else{
+        configCam.rotateX = rot2;
+        requestAnimationFrame(aniTrans2);
+      }
+    }
+    else if(configCam.rotateX>rot2){
+      configCam.rotateX -= dTime*aniSpeed;
+      if(configCam.rotateX>rot2)
+        requestAnimationFrame(aniRot2);
+      else{
+        configCam.rotateX = rot2;
+        requestAnimationFrame(aniTrans2);
+      }
+    }
+  }
+
+  function aniTrans2(now){
+    now *= 0.001;
+    var dTime = now - then;
+    then = now;
+    
+    if(configCam.TransZ<trans2){
+      configCam.TransZ += dTime*aniSpeed;
+      if(configCam.TransZ<trans2)
+        requestAnimationFrame(aniTrans2);
+      else{
+        configCam.TransZ = trans2;
+        requestAnimationFrame(aniRot3);
+      }
+    }
+    else if(configCam.TransZ>trans2){
+      configCam.TransZ -= dTime*aniSpeed;
+      if(configCam.TransZ>trans2)
+        requestAnimationFrame(aniTrans2);
+      else{
+        configCam.TransZ = trans2;
+        requestAnimationFrame(aniRot3);
+      }
+    }
+  }
+
+  function aniRot3(now){
+    now *= 0.001;
+    var dTime = now - then;
+    then = now;
+    
+    if(configCam.rotateZ<rot3){
+      configCam.rotateZ += dTime*aniSpeed;
+      if(configCam.rotateZ<rot3)
+        requestAnimationFrame(aniRot3);
+      else{
+        configCam.rotateZ = rot3;
+      }
+    }
+    else if(configCam.rotateZ>rot3){
+      configCam.rotateZ -= dTime*aniSpeed;
+      if(configCam.rotateZ>rot3)
+        requestAnimationFrame(aniRot3);
+      else{
+        configCam.rotateZ = rot3;
+      }
+    }
+  }
   
 }
 
