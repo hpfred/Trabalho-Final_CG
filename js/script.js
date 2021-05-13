@@ -125,29 +125,6 @@ function main() {
     var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
     // Compute the camera's matrix using look at.
-    /*
-    var cameraPosition = [0, 0, 100];
-    var transZ = configCam.TransZ*2;
-    //var cameraPosition = [configCam.TransX, configCam.TransY, transZ];
-    var target = [0, 0, 0];
-    var up = [0, 1, 0];
-    //var up = [configCam.rotateX, configCam.rotateY, configCam.rotateZ];
-
-    if(configCam.lookAtPoint==true){
-      var cameraMatrix = m4.lookAt(cameraPosition, target, up);
-      configCam.lookAtModel=false;
-    }
-    if(configCam.lookAtModel==true){
-      target = [config.TransX+0.001, config.TransY+0.001, config.TransZ*0];
-      var cameraMatrix = m4.lookAt(cameraPosition, target, up);
-    }
-    if(configCam.lookAtPoint==false && configCam.lookAtModel==false){
-      target = [configCam.TransX+0.001, configCam.TransY+0.001, configCam.TransZ*0];
-      var cameraMatrix = m4.lookAt(cameraPosition, target, up);
-    }
-    //*/
-
-    //Chama função pra usar GUI
     var cameraMatrix = computeMatrixCam1();
 
     // Make a view matrix from the camera matrix.

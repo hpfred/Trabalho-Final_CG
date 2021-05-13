@@ -1,6 +1,7 @@
 var config = {  rotateX: 0,
                 rotateY: 0,
                 rotateZ: 0,
+                rotateP: 0,
                 scale: 30,
                 TransX: 0,
                 TransY: 0,
@@ -18,6 +19,7 @@ var config = {  rotateX: 0,
 var configCam = { rotateX: 0,
                   rotateY: 0,
                   rotateZ: 0,
+                  rotateP: 0,
                   //zoom: 30,
                   TransX: 0,
                   TransY: 0,
@@ -50,7 +52,7 @@ const loadGUI = () => {
   guiModRotAxis.add(config, "rotateX", 0, 100, 0.1).listen().name("X Axis");
   guiModRotAxis.add(config, "rotateY", 0, 100, 0.1).listen().name("Y Axis");
   guiModRotAxis.add(config, "rotateZ", 0, 100, 0.1).listen().name("Z Axis");
-  //guiModRot.add(config, "rotateP", 0, 100, 0.1).listen().name("Point");
+  guiModRot.add(config, "rotateP", 0, 100, 0.1).listen().name("Point");
   guiMod.add(config, "scale", 0, 100, 0.1).listen();  
     ///Calls function that plays animation
   guiMod.add(config, "animate").name("Animate");
@@ -75,7 +77,7 @@ const loadGUI = () => {
   guiCamRotAxis.add(configCam, "rotateX", -50, 50, 0.1).listen().name("X Axis");  //u
   guiCamRotAxis.add(configCam, "rotateY", -50, 50, 0.1).listen().name("Y Axis");  //v
   guiCamRotAxis.add(configCam, "rotateZ", -50, 50, 0.1).listen().name("Z Axis");  //n
-  //guiCamRot.add(config, "rotateP", 0, 100, 0.1).listen().name("Point");
+  guiCamRot.add(configCam, "rotateP", 0, 100, 0.1).listen().name("Point");
   //guiCam.add(config, "zoom", 0, 100, 0.1).listen().name("Zoom");
     ///Folder for look at
   var guiCamLook = guiCam.addFolder("Look At");

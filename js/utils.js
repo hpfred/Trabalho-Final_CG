@@ -64,6 +64,16 @@ function computeMatrix(viewProjectionMatrix) {
 }
 //*/
 
+function pointRotation(matrix, point,pRotation){
+  //translate
+  matrix = m4.translate(matrix,point[0],point[1],point[2]);
+  //rotate
+  matrix = m4.zRotate(matrix,pRotation);
+  //translate back
+  matrix = m4.translate(matrix,-point[0],-point[1],-point[2]);
+
+  return matrix;
+}
 function computeMatrix1(localMatrix) {
   var scale = (config.scale*0.027)+0.2;
   var matrix = m4.translate(
@@ -72,6 +82,11 @@ function computeMatrix1(localMatrix) {
     config.TransY,
     config.TransZ,
   );
+
+  var point = [0,-40,0];
+  var pRotation = degToRad(config.rotateP*3.6);
+  matrix = pointRotation(matrix, point, pRotation);
+
   return m4.scale(matrix, scale, scale, scale);
 }
 function computeMatrix2(localMatrix) {
@@ -94,13 +109,20 @@ function computeMatrixCam1() {
   var cameraPosition = [configCam.TransX, configCam.TransY, transZ];
   var target = [0, 0, 0];
   var up = [0, 1, 0];
+  var point = [-40,0,0];
+  var pRotation = degToRad(configCam.rotateP*3.6);
   
   if(configCam.lookAtPoint==true){
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
   }
   if(configCam.lookAtModel==true){
     target = [config.TransX+0.001, config.TransY+0.001, config.TransZ*0];
+    // target = [computeMatrix1.matrix[12]+0.001,
+    //           computeMatrix1.matrix[13]+0.001,
+    //           computeMatrix1.matrix[14]*0];
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
+    //cameraMatrix = pointRotation(cameraMatrix,computeMatrix1.point,computeMatrix1.pRotation);
+    cameraMatrix = pointRotation(cameraMatrix,[0,-40,0],degToRad(config.rotateP*3.6));
   }
   if(configCam.lookAtPoint==false && configCam.lookAtModel==false){
     target = [configCam.TransX+0.001, configCam.TransY+0.001, configCam.TransZ*0];
@@ -108,6 +130,7 @@ function computeMatrixCam1() {
     cameraMatrix = m4.xRotate(cameraMatrix,degToRad(configCam.rotateX*3.6));
     cameraMatrix = m4.yRotate(cameraMatrix,degToRad(configCam.rotateY*3.6));
     cameraMatrix = m4.zRotate(cameraMatrix,degToRad(configCam.rotateZ*3.6));
+    cameraMatrix = pointRotation(cameraMatrix,point,pRotation);
   }
 
   return cameraMatrix;
@@ -131,6 +154,7 @@ function animate(now){
     now *= 0.001;
     var dTime = now - then;
     then = now;
+
     if(config.rotateX<rot1){
       config.rotateX += dTime*aniSpeed;
       if(config.rotateX<rot1)
@@ -155,6 +179,7 @@ function animate(now){
     now *= 0.001;
     var dTime = now - then;
     then = now;
+
     if(config.TransX<trans1){
       config.TransX += dTime*aniSpeed;
       if(config.TransX<trans1)
@@ -179,6 +204,7 @@ function animate(now){
     now *= 0.001;
     var dTime = now - then;
     then = now;
+
     if(config.rotateY<rot2){
       config.rotateY += dTime*aniSpeed;
       if(config.rotateY<rot2)
@@ -200,12 +226,6 @@ function animateCam(now){
   var rot1 = -13.9, rot2 = 3, rot3 = -2.7;
   var trans1 = -50, trans2 = 15.8;
   var aniSpeed = 10;
-
-  // anitransX=-50
-  // aniRotY=-13.9
-  // aniRotX=3
-  // aniTransZ=15.8
-  // aniRotZ=-2.7
 
   requestAnimationFrame(aniTrans1);
   if(configCam.TransX==trans1)//
@@ -339,7 +359,6 @@ function animateCam(now){
       }
     }
   }
-  
 }
 
 
