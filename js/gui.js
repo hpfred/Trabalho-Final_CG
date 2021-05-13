@@ -5,7 +5,6 @@ var config = {  rotateX: 0,
                 TransX: 0,
                 TransY: 0,
                 TransZ: 0,
-                //chckBoxTst: true,
                 animate: function() {
                   requestAnimationFrame(animate);
                 },
@@ -19,16 +18,15 @@ var config = {  rotateX: 0,
 var configCam = { rotateX: 0,
                   rotateY: 0,
                   rotateZ: 0,
-                  //scale: 30,
+                  //zoom: 30,
                   TransX: 0,
                   TransY: 0,
-                  TransZ: 100,
+                  TransZ: 50,
                   lookAtPoint: false,
                   lookAtModel: false,
                   animate: function() {
                     requestAnimationFrame(animateCam);
                   },
-                  //chooseCam
 };
 
 const loadGUI = () => {
@@ -40,47 +38,66 @@ const loadGUI = () => {
     ///Folders for linear and curve translations
   var guiModTrans = guiMod.addFolder("Translation");
   var guiModTransLin = guiModTrans.addFolder("Linear");
-  guiModTransLin.add(config, "TransX", -50, 50, 0.1).listen();
-  guiModTransLin.add(config, "TransY", -50, 50, 0.1).listen();
-  guiModTransLin.add(config, "TransZ", -50, 50, 0.1).listen();
-  //guiTransCur
-    ///Folder for axis rotation
+  guiModTransLin.open();
+  guiModTransLin.add(config, "TransX", -50, 50, 0.1).listen().name("X Axis");
+  guiModTransLin.add(config, "TransY", -50, 50, 0.1).listen().name("Y Axis");
+  guiModTransLin.add(config, "TransZ", -50, 50, 0.1).listen().name("Z Axis");
+  //guiTrans.add(config, "TransC", -50, 50, 0.1).listen().name("Curve");
+    ///Folder for rotation arround axis and point
   var guiModRot = guiMod.addFolder("Rotate");
-  //guitRotAxis
-  guiModRot.add(config, "rotateX", 0, 100, 0.1).listen();  //guiRotAxis?
-  guiModRot.add(config, "rotateY", 0, 100, 0.1).listen();
-  guiModRot.add(config, "rotateZ", 0, 100, 0.1).listen();
-  //rotate point
+  var guiModRotAxis = guiModRot.addFolder("Axis");
+  guiModRotAxis.open();
+  guiModRotAxis.add(config, "rotateX", 0, 100, 0.1).listen().name("X Axis");
+  guiModRotAxis.add(config, "rotateY", 0, 100, 0.1).listen().name("Y Axis");
+  guiModRotAxis.add(config, "rotateZ", 0, 100, 0.1).listen().name("Z Axis");
+  //guiModRot.add(config, "rotateP", 0, 100, 0.1).listen().name("Point");
   guiMod.add(config, "scale", 0, 100, 0.1).listen();  
     ///Calls function that plays animation
-  guiMod.add(config, "animate"); 
+  guiMod.add(config, "animate").name("Animate");
     ///Calls function that creates and destroys new model new model
-  guiMod.add(config, "addModel");
-  guiMod.add(config, "removeModel");
+  guiMod.add(config, "addModel").name("Add Model");
+  guiMod.add(config, "removeModel").name("Remove Model");
 
     ///Interface for camera transformations
   var guiCam = gui.addFolder("Camera");
     ///Folder for linear and curve translations
   var guiCamTrans = guiCam.addFolder("Translation");
   var guiCamTransLin = guiCamTrans.addFolder("Linear");
-  guiCamTransLin.add(configCam, "TransX", -50, 50, 0.1).listen();
-  guiCamTransLin.add(configCam, "TransY", -50, 50, 0.1).listen();
-  guiCamTransLin.add(configCam, "TransZ", -50, 50, 0.1).listen();
-  //guiCamCur
-    ///Folder for axis rotation
+  guiCamTransLin.open();
+  guiCamTransLin.add(configCam, "TransX", -50, 50, 0.1).listen().name("X Axis");
+  guiCamTransLin.add(configCam, "TransY", -50, 50, 0.1).listen().name("Y Axis");
+  guiCamTransLin.add(configCam, "TransZ", -50, 50, 0.1).listen().name("Z Axis");
+  //guiCamTrans.add(configCam, "TransC", -50, 50, 0.1).listen().name("Curve");
+    ///Folder for rotation arround axis and point
   var guiCamRot = guiCam.addFolder("Rotate");
-  guiCamRot.add(configCam, "rotateX", 0, 100, 0.1).listen();
-  guiCamRot.add(configCam, "rotateY", 0, 100, 0.1).listen();
-  guiCamRot.add(configCam, "rotateZ", 0, 100, 0.1).listen();
-  //point rotation
-  //zoom
+  var guiCamRotAxis = guiCamRot.addFolder("Axis");
+  guiCamRotAxis.open();
+  guiCamRotAxis.add(configCam, "rotateX", 0, 100, 0.1).listen().name("X Axis");
+  guiCamRotAxis.add(configCam, "rotateY", 0, 100, 0.1).listen().name("Y Axis");
+  guiCamRotAxis.add(configCam, "rotateZ", 0, 100, 0.1).listen().name("Z Axis");
+  //guiCamRot.add(config, "rotateP", 0, 100, 0.1).listen().name("Point");
+  //guiCam.add(config, "zoom", 0, 100, 0.1).listen().name("Zoom");
     ///Folder for look at
-  //look at point
-  guiCam.add(configCam, "lookAtPoint").listen();
-  guiCam.add(configCam, "lookAtModel").listen();
-  //look at model while moving
+  var guiCamLook = guiCam.addFolder("Look At");
+  ///guiCamLook.open();
+  guiCamLook.add(configCam, "lookAtPoint").listen().onChange(function(){setChecked("lookAtPoint")}).name("Point");
+  guiCamLook.add(configCam, "lookAtModel").listen().onChange(function(){setChecked("lookAtModel")}).name("Model");
     ///Calls function that plays animation
-  guiCam.add(configCam, "animate"); 
+  guiCam.add(configCam, "animate").name("Animate"); 
     ///Allow selection between multiple cameras/Folder
-  //guiCamSel
+  //var guiCamSel = guiCam.addFodler("Camera Selection");
+  //guiCamSel.add(configCam, "selectCam1").listen().onChange(function(){setChecked("cam1")}).name("Camera 1");
 };
+
+function setChecked(element){
+  if(element=="lookAtModel")
+    configCam.lookAtPoint = false;
+  if(element=="lookAtPoint")
+    configCam.lookAtModel = false;
+
+
+  // if(element=="cam1"){
+  //   configCam.selectCam2 = false;
+  //   configCam.selectCam3 = false;
+  // }
+}
