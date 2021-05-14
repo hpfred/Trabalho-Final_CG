@@ -21,19 +21,19 @@ var configCam = { rotateX: 0,
                   rotateY: 0,
                   rotateZ: 0,
                   rotateP: 0,
-                  zoom: 0,//25,
+                  zoom: 0,
                   TransX: 0,
                   TransY: 0,
-                  TransZ: 0,//50,
+                  TransZ: 0,
                   TransC: 0,
                   lookAtPoint: false,
                   lookAtModel: false,
                   animate: function() {
                     requestAnimationFrame(animateCam);
                   },
-                  selectCam1: true,//function() {},
-                  selectCam2: false,//function() {},
-                  selectCam3: false,//function() {},
+                  selectCam1: true,
+                  selectCam2: false,
+                  selectCam3: false,
 };
 
 const loadGUI = () => {
@@ -98,11 +98,14 @@ const loadGUI = () => {
 };
 
 function setChecked(element){
+  //Unmarks any conflicting checkbox marking, for lookAt
   if(element=="lookAtModel")
     configCam.lookAtPoint = false;
   if(element=="lookAtPoint")
     configCam.lookAtModel = false;
 
+  //Makes sure there is always one, and just one, camera marked
+  //Also sets 'onChange' flag to true to [on main] update the GUI state to the same as the previous state of each camera
   if(element=="cam1"){
     onChange = true;
     configCam.selectCam1 = true;

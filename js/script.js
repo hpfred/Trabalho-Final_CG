@@ -15,7 +15,6 @@ function main() {
   var objectsToDraw = [];
   
   var cubeMain = new Node();
-  //cubeMain.localMatrix = m4.translation(0, 0, 0);
   cubeMain.drawInfo = {
     uniforms: {
       u_colorMult: [0.5, 0.5, 1, 1],
@@ -25,11 +24,9 @@ function main() {
     vertexArray: cubeVAO,
   };
   var cube1 = new Node();
-  //cube1.localMatrix = m4.translation(100, 0, 0);
   cube1.drawInfo = {
     uniforms: {
       u_colorMult: [0.5, 0.5, 1, 1],
-      //u_colorOffset: [0.6, 0.6, 0, 1],
     },
     programInfo: programInfo,
     bufferInfo: cubeBufferInfo,
@@ -38,52 +35,9 @@ function main() {
   cube1.setParent(cubeMain);
 
   var objectsToDraw = [cube1.drawInfo, ];
-  
   var nCubes = 1;
-  //Additional cubes
-  /*
-  function addModel(){
-    if(nCubes==1){
-      nCubes++;
-      var cube2 = new Node();
-      //cube2.localMatrix = m4.translation(30, 0, 0);
-      cube2.drawInfo = {
-        uniforms: {
-          u_colorMult: [0.5, 0.5, 1, 1],
-        },
-        programInfo: programInfo,
-        bufferInfo: cubeBufferInfo,
-        vertexArray: cubeVAO,
-      };
-      cube2.setParent(cubeMain);
-      
-      //objects.push = cube2;
-      var objects = [cubeMain, cube1, cube2];
-      //objectsToDraw.push = cube2.drawInfo;
-      var objectsToDraw = [cube1.drawInfo, cube2.drawInfo, ];
-    }
-    if(nCubes==2){
-      nCubes++;
-      var cube3 = new Node();
-      cube3.localMatrix = m4.translation(-30, 0, 0);
-      cube3.drawInfo = {
-        uniforms: {
-          u_colorMult: [0.5, 0.5, 1, 1],
-        },
-        programInfo: programInfo,
-        bufferInfo: cubeBufferInfo,
-        vertexArray: cubeVAO,
-      };
-      cube1.setParent(cubeMain);
-
-      objects.push = cube3;
-      objectsToDraw.push = cube3.drawInfo;
-    }
-  }
-  //*/
 
   var cube2 = new Node();
-  //cube2.localMatrix = m4.translation(30, 0, 0);
   cube2.drawInfo = {
     uniforms: {
       u_colorMult: [0.5, 0.5, 1, 1],
@@ -94,7 +48,6 @@ function main() {
   };
   cube2.setParent(cubeMain);
   var cube3 = new Node();
-  //cube3.localMatrix = m4.translation(-30, 0, 0);
   cube3.drawInfo = {
     uniforms: {
       u_colorMult: [0.5, 0.5, 1, 1],
@@ -106,17 +59,17 @@ function main() {
   cube3.setParent(cubeMain);
 
   var objects = [cubeMain, cube1, cube2, cube3];
-  //var objectsToDraw = [cube1.drawInfo, cube2.drawInfo, cube3.drawInfo];
 
   loadGUI();
-  //splineCurve();    //Adicionar <script src="src/jsspline.js" type="text/javascript"></script> no html
+  //Calls test function of the Spline library. Commented because I couldn't get it to work.
+  //splineCurve();                          //Add '<script src="src/jsspline.js" type="text/javascript"></script>' to the html
 
   var cam1 = new Camera();
   cam1.update([0,0,50,0], [0,0,0,0], 25, false, false, [0,1,0]);
   cam1.init();
-  var cam2 = new Camera();  //Camera above model, looking down - Vision from above
+  var cam2 = new Camera();                  //Camera above model, looking down - Vision from above
   cam2.update([0,100,0,0], [-50,-12.5,0,0], 25, false, false, [0,0,1]);
-  var cam3 = new Camera();  //Camera on the right side, looking left - vision from the side
+  var cam3 = new Camera();                  //Camera on the right side, looking left - vision from the side
   cam3.update([100,0,0,0], [37.5,0,50,0], 25, false, false, [0,1,0]);
   
   function render(now) {
@@ -126,15 +79,16 @@ function main() {
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
 
+    //Colors the background, in this case, to black. Not necessary.
     //gl.clearColor(0, 0, 0, 1);
     //gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
-    // Compute the camera's matrix using look at.
-    // var cameraMatrix = computeMatrixCam1();
+    //Checks selected camera and calculates it's matrix [using look at] calling 'computeMatrixCam1' function
     if(configCam.selectCam1 == true){
+      //Checks flag 'onChange' to update the GUI values when selected camera first changes
       if(onChange==true){
         cam1.init();
         onChange = false;
@@ -162,21 +116,14 @@ function main() {
     var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
     // ------ Draw the cube --------
-    //cubeUniforms.u_matrix = computeMatrix(viewProjectionMatrix);
-
-    //Mudar pra rotateZ afetar modelos adicionados?
     cubeMain.localMatrix = computeMatrix1(cubeMain.localMatrix);
     cube1.localMatrix = computeMatrix2(cube1.localMatrix);
     
-    //*
-    //if(nCubes>=2){
-      cube2.localMatrix = m4.translate(cube2.localMatrix, 30, 0, 0);
-    //}
-    //if(nCubes==3){
-      //cube2.localMatrix = m4.translate(cube2.localMatrix, 30, 0, 0);
-      cube3.localMatrix = m4.translate(cube3.localMatrix, -30, 0, 0);
-    //}
-    //*/
+    //Calculate the matrix of both 'cube2' and 'cube3' even while not being drawn in the screen
+    cube2.localMatrix = m4.translate(cube2.localMatrix, 30, 0, 0);
+    cube3.localMatrix = m4.translate(cube3.localMatrix, -30, 0, 0);
+
+    //Checks flags 'add1' and 'rmv1' to add or remove 'cube2' or 'cube3' to the draw list
     if(add1){
       if(nCubes==2){
         objectsToDraw.push(cube3.drawInfo);
@@ -205,7 +152,6 @@ function main() {
     objects.forEach(function(object) {
       object.drawInfo.uniforms.u_matrix = m4.multiply(viewProjectionMatrix, object.worldMatrix);
       object.localMatrix = m4.identity();
-      //object.drawInfo.uniforms.u_matrix = object.worldMatrix;
     });
      
     twgl.drawObjectList(gl, objectsToDraw);

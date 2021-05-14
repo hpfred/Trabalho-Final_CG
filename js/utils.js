@@ -3,7 +3,6 @@ var Node = function(){
     this.localMatrix = m4.identity();
     this.worldMatrix = m4.identity();
 };
-  
 Node.prototype.setParent = function(parent){
     if (this.parent){
         var ndx = this.parent.children.indexOf(this);
@@ -16,7 +15,6 @@ Node.prototype.setParent = function(parent){
     }
     this.parent = parent;
 };
-  
 Node.prototype.updateWorldMatrix = function(matrix){
     if(matrix){
         m4.multiply(matrix, this.localMatrix, this.worldMatrix);
@@ -30,7 +28,6 @@ Node.prototype.updateWorldMatrix = function(matrix){
     });
 };
 
-//Criar uma classe camera para guardar as informacoes da GUI de cada camera, atualizando a GUI na troca das cameras
 var Camera = function(){
   this.translation = [];
   this.rotation = [];
@@ -63,14 +60,14 @@ Camera.prototype.update = function(trans, rot, zoom, lAP, lAM, up){
   this.up = up;
 }
 
-var onChange = false;
-
 const degToRad = (d) => (d * Math.PI) / 180;
-
 const radToDeg = (r) => (r * 180) / Math.PI;
 
+//Creates global scope flags
+var onChange = false;
 var add1=false;
 var rmv1=false;
+//Functions that sets flag as true on button click, to be used on render time to add or remove model to draw list
 function addModel(){
   add1 = true;
 }
@@ -78,32 +75,12 @@ function rmvModel(){
   rmv1 = true;
 }
 
-/*
-function computeMatrix(viewProjectionMatrix) {
-  var xRotation = degToRad(config.rotateX*3.6);
-  var yRotation = degToRad(config.rotateY*3.6);
-  var zRotation = degToRad(config.rotateZ*3.6);
-  var scale = (config.scale*0.027)+0.2;
-
-  var matrix = m4.translate(
-    viewProjectionMatrix,
-    config.TransX,
-    config.TransY,
-    config.TransZ,
-  );
-  var scl = m4.scale(matrix, scale, scale, scale);
-  var xRot = m4.xRotate(scl, xRotation);
-  var yRot = m4.yRotate(xRot, yRotation);
-  return m4.zRotate(yRot, zRotation);
-}
-//*/
-
 function pointRotation(matrix, point,pRotation){
-  //translate
+  //Translate
   matrix = m4.translate(matrix,point[0],point[1],point[2]);
-  //rotate
+  //Rotate
   matrix = m4.zRotate(matrix,pRotation);
-  //translate back
+  //Translate back
   matrix = m4.translate(matrix,-point[0],-point[1],-point[2]);
 
   return matrix;
@@ -138,12 +115,9 @@ function computeMatrix2(localMatrix) {
   return m4.zRotate(yRot, zRotation);
 }
 function computeMatrixCam1(cam) {
-  //var cameraPosition = [0, 0, 100];
   var target = [0, 0, 0];
-  //var up = [0, 1, 0];
   var up = cam.up;
   
-  //cam.translation = [configCam.TransX,configCam.TransY,configCam.TransZ];
   cam.update(
     [configCam.TransX,configCam.TransY,configCam.TransZ,configCam.TransC],
     [configCam.rotateX,configCam.rotateY,configCam.rotateZ,configCam.rotateP],
@@ -162,7 +136,6 @@ function computeMatrixCam1(cam) {
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
   }
   if(configCam.lookAtModel==true){
-    //var zoom = cameraPosition[2]-config.TransZ;
     var modelPosition = [config.TransX, config.TransY, config.TransZ];
     var zoom = m4.distance(cameraPosition,modelPosition);
     zoom = (75-zoom)+(50-configCam.zoom);
@@ -171,10 +144,6 @@ function computeMatrixCam1(cam) {
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
     cameraMatrix = pointRotation(cameraMatrix,[0,-40,0],degToRad(config.rotateP*3.6));
     cameraMatrix = m4.translate(cameraMatrix,0,0,zoom);
-    
-    // target = [config.TransX+0.001, config.TransY+0.001, config.TransZ*0];
-    // var cameraMatrix = m4.lookAt(cameraPosition, target, up);
-    // cameraMatrix = pointRotation(cameraMatrix,[0,-40,0],degToRad(config.rotateP*3.6));
   }
   if(configCam.lookAtPoint==false && configCam.lookAtModel==false){
     target = [configCam.TransX+0.001, configCam.TransY+0.001, configCam.TransZ*0];
@@ -188,8 +157,8 @@ function computeMatrixCam1(cam) {
   return cameraMatrix;
 }
 
-//Devido ao paralelismo(?) quanto mais vezes o botao que chama funcao animate e clicado, mais rapido a animacao e executada
-//A velocidade e incrementada devido a tecnica usada para manter o tempo de execucao constante
+///There is some kind of paralelization while running 'requestAnimationFrame', which causes that the more times you click the animation function button, the faster the animation will play
+///The animation speed is probably incremented due to the technique used to keep the animation time constant, with the multiple calls accessing the memory and changing the time values, and making the dTime increase exponentially 
 function animate(now){
   now *= 0.001;
   var then = now;
@@ -413,7 +382,7 @@ function animateCam(now){
   }
 }
 
-
+///This is a test code for the Spline library. It's commented because I wasn't able to make it work
 // function splineCurve(){
 //   var jsspline = require("js-spline");
   
