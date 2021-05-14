@@ -110,7 +110,6 @@ function computeMatrixCam1() {
   
   var transZ = configCam.TransZ*2;
   var cameraPosition = [configCam.TransX, configCam.TransY, transZ];
-  var modelPosition = [config.TransX, config.TransY, config.TransZ];
   var point = [-40,0,0];
   var pRotation = degToRad(configCam.rotateP*3.6);
   
@@ -119,17 +118,18 @@ function computeMatrixCam1() {
   }
   if(configCam.lookAtModel==true){
     //var zoom = cameraPosition[2]-config.TransZ;
+    var modelPosition = [config.TransX, config.TransY, config.TransZ];
     var zoom = m4.distance(cameraPosition,modelPosition);
-    //configCam.rotateP = zoom; //improvised debug
-    //zoom = (zoom-95)*(120-configCam.zoom*0.9)/100;
     zoom = (75-zoom)+(50-configCam.zoom);
-    
-    //cameraPosition[2] = zoom;
     
     target = [config.TransX+0.001, config.TransY+0.001, config.TransZ*0];
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
     cameraMatrix = pointRotation(cameraMatrix,[0,-40,0],degToRad(config.rotateP*3.6));
     cameraMatrix = m4.translate(cameraMatrix,0,0,zoom);
+    
+    // target = [config.TransX+0.001, config.TransY+0.001, config.TransZ*0];
+    // var cameraMatrix = m4.lookAt(cameraPosition, target, up);
+    // cameraMatrix = pointRotation(cameraMatrix,[0,-40,0],degToRad(config.rotateP*3.6));
   }
   if(configCam.lookAtPoint==false && configCam.lookAtModel==false){
     target = [configCam.TransX+0.001, configCam.TransY+0.001, configCam.TransZ*0];
