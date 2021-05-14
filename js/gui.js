@@ -20,7 +20,7 @@ var configCam = { rotateX: 0,
                   rotateY: 0,
                   rotateZ: 0,
                   rotateP: 0,
-                  //zoom: 30,
+                  zoom: 25,
                   TransX: 0,
                   TransY: 0,
                   TransZ: 50,
@@ -78,7 +78,7 @@ const loadGUI = () => {
   guiCamRotAxis.add(configCam, "rotateY", -50, 50, 0.1).listen().name("Y Axis");  //v
   guiCamRotAxis.add(configCam, "rotateZ", -50, 50, 0.1).listen().name("Z Axis");  //n
   guiCamRot.add(configCam, "rotateP", 0, 100, 0.1).listen().name("Point");
-  //guiCam.add(config, "zoom", 0, 100, 0.1).listen().name("Zoom");
+  guiCam.add(configCam, "zoom", 0, 100, 0.1).listen().name("Zoom");
     ///Folder for look at
   var guiCamLook = guiCam.addFolder("Look At");
   ///guiCamLook.open();
