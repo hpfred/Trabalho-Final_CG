@@ -109,6 +109,13 @@ function main() {
 
   loadGUI();
   //splineCurve();
+
+  var cam1 = new Camera();
+  cam1.update([0,0,50,0], [0,0,0,0], 25, false, false);
+  var cam2 = new Camera();
+  cam2.update([0,0,50,0], [0,0,0,0], 25, false, false);
+  var cam3 = new Camera();
+  cam3.update([0,0,50,0], [0,0,0,0], 25, false, false);
   
   function render(now) {
     twgl.resizeCanvasToDisplaySize(gl.canvas);
@@ -124,7 +131,28 @@ function main() {
     var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
     // Compute the camera's matrix using look at.
-    var cameraMatrix = computeMatrixCam1();
+    // var cameraMatrix = computeMatrixCam1();
+    if(configCam.selectCam1 == true){
+      if(onChange==true){
+        cam1.init();
+        onChange = false;
+      }
+      var cameraMatrix = computeMatrixCam1(cam1);
+    }
+    if(configCam.selectCam2 == true){
+      if(onChange==true){
+        cam2.init();
+        onChange = false;
+      }
+      var cameraMatrix = computeMatrixCam1(cam2);
+    }
+    if(configCam.selectCam3 == true){
+      if(onChange==true){
+        cam3.init();
+        onChange = false;
+      }
+      var cameraMatrix = computeMatrixCam1(cam3);
+    }
 
     // Make a view matrix from the camera matrix.
     var viewMatrix = m4.inverse(cameraMatrix);

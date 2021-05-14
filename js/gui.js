@@ -104,22 +104,25 @@ function setChecked(element){
     configCam.lookAtModel = false;
 
   if(element=="cam1"){
-    //configCam.selectCam1 = true;
+    onChange = true;
+    // configCam.selectCam1 = true;
     configCam.selectCam2 = false;
     configCam.selectCam3 = false;
   }
   if(element=="cam2"){
+    onChange = true;
     configCam.selectCam1 = false;
-    //configCam.selectCam2 = true;
+    // configCam.selectCam2 = true;
     configCam.selectCam3 = false;
 
-    configCam.TransX = 0;
-    configCam.TransY = 50;
-    configCam.TransZ = 0;
+    // configCam.TransX = 0;
+    // configCam.TransY = 50;
+    // configCam.TransZ = 0;
   }
   if(element=="cam3"){
+    onChange = true;
     configCam.selectCam1 = false;
     configCam.selectCam2 = false;
-    //configCam.selectCam3 = true;
+    // configCam.selectCam3 = true;
   }
 }

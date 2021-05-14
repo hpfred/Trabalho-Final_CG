@@ -30,18 +30,38 @@ Node.prototype.updateWorldMatrix = function(matrix){
     });
 };
 
-///Criar uma classe camera para guardar as informacoes da GUI de cada camera, atualizando a GUI na troca das cameras
-// var Camera = function(){
-//   this.translation = [];
-//   this.rotation = [];
-//   this.zoom = 0;
-//   this.lAP = false;
-//   this.lAM = false;
-// }
-// Camera.prototype.init = function(){
-//
-// }
+//Criar uma classe camera para guardar as informacoes da GUI de cada camera, atualizando a GUI na troca das cameras
+var Camera = function(){
+  this.translation = [];
+  this.rotation = [];
+  this.zoom = 0;
+  this.lAP = false;
+  this.lAM = false;
+}
+//Sets the sliders and values to the current state of that camera
+Camera.prototype.init = function(){
+  configCam.TransX = this.translation[0];
+  configCam.TransY = this.translation[1];
+  configCam.TransZ = this.translation[2];
+  configCam.TransC = this.translation[3];
+  configCam.rotateX = this.rotation[0];
+  configCam.rotateY = this.rotation[1];
+  configCam.rotateZ = this.rotation[2];
+  configCam.rotateP = this.rotation[3];
+  configCam.zoom = this.zoom;
+  configCam.lookAtPoint = this.lAP;
+  configCam.lookAtModel = this.lAM;
+}
+//Updates the values on the class
+Camera.prototype.update = function(trans, rot, zoom, lAP, lAM){
+  this.translation = trans;
+  this.rotation = rot;
+  this.zoom = zoom;
+  this.lAP = lAP;
+  this.lAM = lAM;
+}
 
+var onChange = false;
 
 const degToRad = (d) => (d * Math.PI) / 180;
 
@@ -115,11 +135,20 @@ function computeMatrix2(localMatrix) {
   var yRot = m4.yRotate(xRot, yRotation);
   return m4.zRotate(yRot, zRotation);
 }
-function computeMatrixCam1() {
+function computeMatrixCam1(cam) {
   //var cameraPosition = [0, 0, 100];
   var target = [0, 0, 0];
   var up = [0, 1, 0];
   
+  //cam.translation = [configCam.TransX,configCam.TransY,configCam.TransZ];
+  cam.update(
+    [configCam.TransX,configCam.TransY,configCam.TransZ,configCam.TransC],
+    [configCam.rotateX,configCam.rotateY,configCam.rotateZ,configCam.rotateP],
+    configCam.zoom,
+    configCam.lookAtPoint,
+    configCam.lookAtModel
+  );
+
   var transZ = configCam.TransZ*2;
   var cameraPosition = [configCam.TransX, configCam.TransY, transZ];
   var point = [-40,0,0];
