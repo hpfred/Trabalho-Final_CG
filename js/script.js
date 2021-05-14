@@ -29,6 +29,7 @@ function main() {
   cube1.drawInfo = {
     uniforms: {
       u_colorMult: [0.5, 0.5, 1, 1],
+      //u_colorOffset: [0.6, 0.6, 0, 1],
     },
     programInfo: programInfo,
     bufferInfo: cubeBufferInfo,
@@ -108,14 +109,15 @@ function main() {
   //var objectsToDraw = [cube1.drawInfo, cube2.drawInfo, cube3.drawInfo];
 
   loadGUI();
-  //splineCurve();
+  //splineCurve();    //Adicionar <script src="src/jsspline.js" type="text/javascript"></script> no html
 
   var cam1 = new Camera();
-  cam1.update([0,0,50,0], [0,0,0,0], 25, false, false);
-  var cam2 = new Camera();
-  cam2.update([0,0,50,0], [0,0,0,0], 25, false, false);
-  var cam3 = new Camera();
-  cam3.update([0,0,50,0], [0,0,0,0], 25, false, false);
+  cam1.update([0,0,50,0], [0,0,0,0], 25, false, false, [0,1,0]);
+  cam1.init();
+  var cam2 = new Camera();  //Camera above model, looking down - Vision from above
+  cam2.update([0,100,0,0], [-50,-12.5,0,0], 25, false, false, [0,0,1]);
+  var cam3 = new Camera();  //Camera on the right side, looking left - vision from the side
+  cam3.update([100,0,0,0], [37.5,0,50,0], 25, false, false, [0,1,0]);
   
   function render(now) {
     twgl.resizeCanvasToDisplaySize(gl.canvas);

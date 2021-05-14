@@ -21,10 +21,10 @@ var configCam = { rotateX: 0,
                   rotateY: 0,
                   rotateZ: 0,
                   rotateP: 0,
-                  zoom: 25,
+                  zoom: 0,//25,
                   TransX: 0,
                   TransY: 0,
-                  TransZ: 50,
+                  TransZ: 0,//50,
                   TransC: 0,
                   lookAtPoint: false,
                   lookAtModel: false,
@@ -92,9 +92,9 @@ const loadGUI = () => {
   guiCam.add(configCam, "animate").name("Animate"); 
     ///Folder for camera selection
   var guiCamSel = guiCam.addFolder("Camera Selection");
-  guiCamSel.add(configCam, "selectCam1").listen().onChange(function(){setChecked("cam1")}).name("Camera 1");
-  guiCamSel.add(configCam, "selectCam2").listen().onChange(function(){setChecked("cam2")}).name("Camera 2");
-  guiCamSel.add(configCam, "selectCam3").listen().onChange(function(){setChecked("cam3")}).name("Camera 3");
+  guiCamSel.add(configCam, "selectCam1").listen().onChange(function(){setChecked("cam1")}).name("Camera 1 (Front)");
+  guiCamSel.add(configCam, "selectCam2").listen().onChange(function(){setChecked("cam2")}).name("Camera 2 (Above)");
+  guiCamSel.add(configCam, "selectCam3").listen().onChange(function(){setChecked("cam3")}).name("Camera 3 (Side)");
 };
 
 function setChecked(element){
@@ -105,24 +105,20 @@ function setChecked(element){
 
   if(element=="cam1"){
     onChange = true;
-    // configCam.selectCam1 = true;
+    configCam.selectCam1 = true;
     configCam.selectCam2 = false;
     configCam.selectCam3 = false;
   }
   if(element=="cam2"){
     onChange = true;
     configCam.selectCam1 = false;
-    // configCam.selectCam2 = true;
+    configCam.selectCam2 = true;
     configCam.selectCam3 = false;
-
-    // configCam.TransX = 0;
-    // configCam.TransY = 50;
-    // configCam.TransZ = 0;
   }
   if(element=="cam3"){
     onChange = true;
     configCam.selectCam1 = false;
     configCam.selectCam2 = false;
-    // configCam.selectCam3 = true;
+    configCam.selectCam3 = true;
   }
 }

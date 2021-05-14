@@ -37,6 +37,7 @@ var Camera = function(){
   this.zoom = 0;
   this.lAP = false;
   this.lAM = false;
+  this.up = [];
 }
 //Sets the sliders and values to the current state of that camera
 Camera.prototype.init = function(){
@@ -53,12 +54,13 @@ Camera.prototype.init = function(){
   configCam.lookAtModel = this.lAM;
 }
 //Updates the values on the class
-Camera.prototype.update = function(trans, rot, zoom, lAP, lAM){
+Camera.prototype.update = function(trans, rot, zoom, lAP, lAM, up){
   this.translation = trans;
   this.rotation = rot;
   this.zoom = zoom;
   this.lAP = lAP;
   this.lAM = lAM;
+  this.up = up;
 }
 
 var onChange = false;
@@ -138,7 +140,8 @@ function computeMatrix2(localMatrix) {
 function computeMatrixCam1(cam) {
   //var cameraPosition = [0, 0, 100];
   var target = [0, 0, 0];
-  var up = [0, 1, 0];
+  //var up = [0, 1, 0];
+  var up = cam.up;
   
   //cam.translation = [configCam.TransX,configCam.TransY,configCam.TransZ];
   cam.update(
@@ -146,7 +149,8 @@ function computeMatrixCam1(cam) {
     [configCam.rotateX,configCam.rotateY,configCam.rotateZ,configCam.rotateP],
     configCam.zoom,
     configCam.lookAtPoint,
-    configCam.lookAtModel
+    configCam.lookAtModel,
+    up,
   );
 
   var transZ = configCam.TransZ*2;
