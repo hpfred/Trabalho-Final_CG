@@ -14,7 +14,6 @@ function main() {
   var objects = [];
   var objectsToDraw = [];
   
-  //*
   var cubeMain = new Node();
   //cubeMain.localMatrix = m4.translation(0, 0, 0);
   cubeMain.drawInfo = {
@@ -25,7 +24,6 @@ function main() {
     bufferInfo: cubeBufferInfo,
     vertexArray: cubeVAO,
   };
-  //*
   var cube1 = new Node();
   //cube1.localMatrix = m4.translation(100, 0, 0);
   cube1.drawInfo = {
@@ -95,7 +93,7 @@ function main() {
   };
   cube2.setParent(cubeMain);
   var cube3 = new Node();
-  cube3.localMatrix = m4.translation(-30, 0, 0);
+  //cube3.localMatrix = m4.translation(-30, 0, 0);
   cube3.drawInfo = {
     uniforms: {
       u_colorMult: [0.5, 0.5, 1, 1],
@@ -110,6 +108,7 @@ function main() {
   //var objectsToDraw = [cube1.drawInfo, cube2.drawInfo, cube3.drawInfo];
 
   loadGUI();
+  //splineCurve();
   
   function render(now) {
     twgl.resizeCanvasToDisplaySize(gl.canvas);

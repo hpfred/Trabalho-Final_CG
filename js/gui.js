@@ -6,6 +6,7 @@ var config = {  rotateX: 0,
                 TransX: 0,
                 TransY: 0,
                 TransZ: 0,
+                TransC: 0,
                 animate: function() {
                   requestAnimationFrame(animate);
                 },
@@ -24,11 +25,15 @@ var configCam = { rotateX: 0,
                   TransX: 0,
                   TransY: 0,
                   TransZ: 50,
+                  TransC: 0,
                   lookAtPoint: false,
                   lookAtModel: false,
                   animate: function() {
                     requestAnimationFrame(animateCam);
                   },
+                  selectCam1: true,//function() {},
+                  selectCam2: false,//function() {},
+                  selectCam3: false,//function() {},
 };
 
 const loadGUI = () => {
@@ -44,7 +49,7 @@ const loadGUI = () => {
   guiModTransLin.add(config, "TransX", -50, 50, 0.1).listen().name("X Axis");
   guiModTransLin.add(config, "TransY", -50, 50, 0.1).listen().name("Y Axis");
   guiModTransLin.add(config, "TransZ", -50, 50, 0.1).listen().name("Z Axis");
-  //guiTrans.add(config, "TransC", -50, 50, 0.1).listen().name("Curve");
+  guiModTrans.add(config, "TransC", 0, 100, 0.1).listen().name("Curve");
     ///Folder for rotation arround axis and point
   var guiModRot = guiMod.addFolder("Rotate");
   var guiModRotAxis = guiModRot.addFolder("Axis");
@@ -69,7 +74,7 @@ const loadGUI = () => {
   guiCamTransLin.add(configCam, "TransX", -50, 50, 0.1).listen().name("X Axis");
   guiCamTransLin.add(configCam, "TransY", -50, 50, 0.1).listen().name("Y Axis");
   guiCamTransLin.add(configCam, "TransZ", -50, 50, 0.1).listen().name("Z Axis");
-  //guiCamTrans.add(configCam, "TransC", -50, 50, 0.1).listen().name("Curve");
+  guiCamTrans.add(configCam, "TransC", -50, 50, 0.1).listen().name("Curve");
     ///Folder for rotation arround axis and point
   var guiCamRot = guiCam.addFolder("Rotate");
   var guiCamRotAxis = guiCamRot.addFolder("Axis");
@@ -81,14 +86,15 @@ const loadGUI = () => {
   guiCam.add(configCam, "zoom", 0, 100, 0.1).listen().name("Zoom");
     ///Folder for look at
   var guiCamLook = guiCam.addFolder("Look At");
-  ///guiCamLook.open();
   guiCamLook.add(configCam, "lookAtPoint").listen().onChange(function(){setChecked("lookAtPoint")}).name("Point");
   guiCamLook.add(configCam, "lookAtModel").listen().onChange(function(){setChecked("lookAtModel")}).name("Model");
     ///Calls function that plays animation
   guiCam.add(configCam, "animate").name("Animate"); 
-    ///Allow selection between multiple cameras/Folder
-  //var guiCamSel = guiCam.addFodler("Camera Selection");
-  //guiCamSel.add(configCam, "selectCam1").listen().onChange(function(){setChecked("cam1")}).name("Camera 1");
+    ///Folder for camera selection
+  var guiCamSel = guiCam.addFolder("Camera Selection");
+  guiCamSel.add(configCam, "selectCam1").listen().onChange(function(){setChecked("cam1")}).name("Camera 1");
+  guiCamSel.add(configCam, "selectCam2").listen().onChange(function(){setChecked("cam2")}).name("Camera 2");
+  guiCamSel.add(configCam, "selectCam3").listen().onChange(function(){setChecked("cam3")}).name("Camera 3");
 };
 
 function setChecked(element){
@@ -97,9 +103,23 @@ function setChecked(element){
   if(element=="lookAtPoint")
     configCam.lookAtModel = false;
 
+  if(element=="cam1"){
+    //configCam.selectCam1 = true;
+    configCam.selectCam2 = false;
+    configCam.selectCam3 = false;
+  }
+  if(element=="cam2"){
+    configCam.selectCam1 = false;
+    //configCam.selectCam2 = true;
+    configCam.selectCam3 = false;
 
-  // if(element=="cam1"){
-  //   configCam.selectCam2 = false;
-  //   configCam.selectCam3 = false;
-  // }
+    configCam.TransX = 0;
+    configCam.TransY = 50;
+    configCam.TransZ = 0;
+  }
+  if(element=="cam3"){
+    configCam.selectCam1 = false;
+    configCam.selectCam2 = false;
+    //configCam.selectCam3 = true;
+  }
 }

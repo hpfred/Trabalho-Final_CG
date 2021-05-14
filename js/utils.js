@@ -30,6 +30,18 @@ Node.prototype.updateWorldMatrix = function(matrix){
     });
 };
 
+///Criar uma classe camera para guardar as informacoes da GUI de cada camera, atualizando a GUI na troca das cameras
+// var Camera = function(){
+//   this.translation = [];
+//   this.rotation = [];
+//   this.zoom = 0;
+//   this.lAP = false;
+//   this.lAM = false;
+// }
+// Camera.prototype.init = function(){
+//
+// }
+
 
 const degToRad = (d) => (d * Math.PI) / 180;
 
@@ -369,42 +381,33 @@ function animateCam(now){
 }
 
 
-/*
-var nCubes = 1;
-function addModel(){
-  if(nCubes==1){
-    nCubes++;
-    var cube2 = new Node();
-    cube2.localMatrix = m4.translation(30, 0, 0);
-    cube2.drawInfo = {
-      uniforms: {
-        u_colorMult: [0.5, 0.5, 1, 1],
-      },
-      programInfo: main.programInfo,
-      bufferInfo: main.cubeBufferInfo,
-      vertexArray: main.cubeVAO,
-    };
-
-    main.objects = [cubeMain, cube1, cube2];
-    main.objectsToDraw = [cube1.drawInfo, cube2.drawInfo];
-    cube2.setParent(main.cubeMain);
-  }
-  if(nCubes==2){
-    nCubes++;
-    var cube3 = new Node();
-    cube3.localMatrix = m4.translation(-30, 0, 0);
-    cube3.drawInfo = {
-      uniforms: {
-        u_colorMult: [0.5, 0.5, 1, 1],
-      },
-      programInfo: main.programInfo,
-      bufferInfo: main.cubeBufferInfo,
-      vertexArray: main.cubeVAO,
-    };
-
-    main.objects.push = cube3;
-    main.objectsToDraw.push = cube3.drawInfo;
-    cube1.setParent(main.cubeMain);
-  }
-}
-//*/
+// function splineCurve(){
+//   var jsspline = require("js-spline");
+  
+//   var curve = new jsspline.BSpline({
+//     steps: 100 // number of interpolated points between 4 way points
+//   });
+//   for(var i = 0; i < 100; ++i) {
+//   curve.addWayPoint({ x: i, y: Math.sin(Math.PI * i * 0.2), z: 0.0});
+//   }
+//   console.log("nodes: " + curve.nodes.length); // 9700 interpolated points
+  
+//   // first node
+//   curve.nodes[0].x;
+//   curve.nodes[0].y;
+//   curve.nodes[0].z;
+  
+//   // second node
+//   curve.nodes[1].x;
+//   curve.nodes[1].y;
+//   curve.nodes[1].z;
+//   // distance from the first node
+//   curve.distances[1]
+  
+//   // third node
+//   curve.nodes[2].x;
+//   curve.nodes[2].y;
+//   curve.nodes[2].z;
+//   // distance from the first node
+//   curve.distances[2];
+// }
