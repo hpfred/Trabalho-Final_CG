@@ -87,7 +87,6 @@ function pointRotation(matrix, point, pRotation){
 }
 function splineCurve(matrix, TransC, x, y){
   var t = TransC*0.01;
-  //var x0=75, y0=0, x1=0, y1=-100, x2=0, y2=100, x3=-75, y3=0;
   var xout = (1-t)*((1-t)*((1-t)*x[0] + t*x[1]) + t*((1-t)*x[1] + t*x[2])) + t*((1-t)*((1-t)*x[1] + t*x[2]) + t*((1-t)*x[2] + t*x[3]));
   var yout = (1-t)*((1-t)*((1-t)*y[0] + t*y[1]) + t*((1-t)*y[1] + t*y[2])) + t*((1-t)*((1-t)*y[1]+t*y[2]) + t*((1-t)*y[2] + t*y[3]));
 
@@ -107,7 +106,7 @@ function computeMatrix1(localMatrix) {
   var point = [0,-40,0];
   var pRotation = degToRad(config.rotateP*3.6);
   matrix = pointRotation(matrix, point, pRotation);
-  matrix = splineCurve(matrix, 100-config.TransC, [75,0,0,-75], [0,-100,100,0]);
+  matrix = splineCurve(matrix, 50-config.TransC, [75,0,0,-75], [0,-100,100,0]);
 
   return m4.scale(matrix, scale, scale, scale);
 }
@@ -141,7 +140,7 @@ function computeMatrixCam1(cam) {
   var transZ = configCam.TransZ*2;
   var cameraPosition = [configCam.TransX, configCam.TransY, transZ];
   var matrix = m4.identity();
-  matrix = splineCurve(matrix,50-configCam.TransC,  [0,-100,100,0], [-40,0,0,40]);//[20,-100,100,40], [-30,0,0,30]);//[0,-70,70,0], [-30,0,0,30]);
+  matrix = splineCurve(matrix,50-configCam.TransC,  [0,-100,100,0], [-40,0,0,40]);
   cameraPosition = m4.addVectors(cameraPosition,[matrix[12],matrix[13],matrix[14]]);
 
   var point = [-40,0,0];
@@ -152,21 +151,23 @@ function computeMatrixCam1(cam) {
   }
   if(configCam.lookAtModel==true){
     var modelPosition = [config.TransX, config.TransY, config.TransZ];
+    //Zoom is proportional to the distance between the camera and the model
+    //but the proportional nature might break in some situation with some camera and model positions/angles
     var zoom = m4.distance(cameraPosition,modelPosition);
     zoom = (75-zoom)+(50-configCam.zoom);
 
+    //Sometimes the 'look at model' might break with some camera and model positions/angles
+    //specifically having simultaneously rotation around a point and curve translation made the 'look at' break (appears to have stopped/been fixed)
     matrix = m4.identity();
     target = [config.TransX+0.001, config.TransY+0.001, config.TransZ*0];
     matrix = pointRotation(matrix,[0,-40,0],degToRad(config.rotateP*3.6));
     target = m4.addVectors(target,[matrix[12],matrix[13],matrix[14]]);
     matrix = m4.identity();
-    matrix = splineCurve(matrix,config.TransC, [75,0,0,-75], [0,-100,100,0]);
+    matrix = splineCurve(matrix,50+config.TransC, [75,0,0,-75], [0,-100,100,0]);
     target = m4.subtractVectors(target,[matrix[12],matrix[13],matrix[14]]);
 
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
-    //cameraMatrix = pointRotation(cameraMatrix,[0,-40,0],degToRad(config.rotateP*3.6));
     cameraMatrix = m4.translate(cameraMatrix,0,0,zoom);
-    //cameraMatrix = splineCurve(cameraMatrix,config.TransC, [75,0,0,-75], [0,-100,100,0]);
   }
   if(configCam.lookAtPoint==false && configCam.lookAtModel==false){
     target = [configCam.TransX+0.001+matrix[12], configCam.TransY+0.001+matrix[13], configCam.TransZ*0];
@@ -404,35 +405,3 @@ function animateCam(now){
     }
   }
 }
-
-///This is a test code for the Spline library. It's commented because I wasn't able to make it work
-// function splineCurve(){
-//   var jsspline = require("js-spline");
-  
-//   var curve = new jsspline.BSpline({
-//     steps: 100 // number of interpolated points between 4 way points
-//   });
-//   for(var i = 0; i < 100; ++i) {
-//   curve.addWayPoint({ x: i, y: Math.sin(Math.PI * i * 0.2), z: 0.0});
-//   }
-//   console.log("nodes: " + curve.nodes.length); // 9700 interpolated points
-  
-//   // first node
-//   curve.nodes[0].x;
-//   curve.nodes[0].y;
-//   curve.nodes[0].z;
-  
-//   // second node
-//   curve.nodes[1].x;
-//   curve.nodes[1].y;
-//   curve.nodes[1].z;
-//   // distance from the first node
-//   curve.distances[1]
-  
-//   // third node
-//   curve.nodes[2].x;
-//   curve.nodes[2].y;
-//   curve.nodes[2].z;
-//   // distance from the first node
-//   curve.distances[2];
-// }

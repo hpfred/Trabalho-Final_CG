@@ -6,7 +6,7 @@ var config = {  rotateX: 0,
                 TransX: 0,
                 TransY: 0,
                 TransZ: 0,
-                TransC: 50,
+                TransC: 0,
                 animate: function() {
                   requestAnimationFrame(animate);
                 },
@@ -49,7 +49,7 @@ const loadGUI = () => {
   guiModTransLin.add(config, "TransX", -50, 50, 0.1).listen().name("X Axis");
   guiModTransLin.add(config, "TransY", -50, 50, 0.1).listen().name("Y Axis");
   guiModTransLin.add(config, "TransZ", -50, 50, 0.1).listen().name("Z Axis");
-  guiModTrans.add(config, "TransC", 0, 100, 0.1).listen().name("Curve");
+  guiModTrans.add(config, "TransC", -50, 50, 0.1).listen().name("Curve");
     ///Folder for rotation arround axis and point
   var guiModRot = guiMod.addFolder("Rotate");
   var guiModRotAxis = guiModRot.addFolder("Axis");

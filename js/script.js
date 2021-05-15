@@ -64,8 +64,6 @@ function main() {
   var objects = [cubeMain, cube1, cube2, cube3];
 
   loadGUI();
-  //Calls test function of the Spline library. Commented because I couldn't get it to work.
-  //splineCurve();                          //Add '<script src="src/jsspline.js" type="text/javascript"></script>' to the html
 
   var cam1 = new Camera();
   cam1.update([0,0,50,0], [0,0,0,0], 25, false, false, [0,1,0]);
@@ -82,7 +80,7 @@ function main() {
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
 
-    //Colors the background, in this case, to black. Not necessary.
+    ///Colors the background, in this case, to black. Not necessary.
     //gl.clearColor(0, 0, 0, 1);
     //gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
