@@ -6,7 +6,7 @@ var config = {  rotateX: 0,
                 TransX: 0,
                 TransY: 0,
                 TransZ: 0,
-                TransC: 0,
+                TransC: 50,
                 animate: function() {
                   requestAnimationFrame(animate);
                 },

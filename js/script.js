@@ -1,3 +1,6 @@
+/// Trabalho 1 - CG : Mudar posicoes usando uma interface
+/// Frederico Peixoto Antunes
+
 function main() {
   const { gl, programInfo } = initializeWorld();
   

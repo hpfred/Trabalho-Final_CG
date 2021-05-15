@@ -75,13 +75,25 @@ function rmvModel(){
   rmv1 = true;
 }
 
-function pointRotation(matrix, point,pRotation){
+function pointRotation(matrix, point, pRotation){
   //Translate
   matrix = m4.translate(matrix,point[0],point[1],point[2]);
   //Rotate
   matrix = m4.zRotate(matrix,pRotation);
   //Translate back
   matrix = m4.translate(matrix,-point[0],-point[1],-point[2]);
+
+  return matrix;
+}
+function splineCurve(matrix, TransC){
+  //((1-t)((1-t)((1-t)*10+t*6)+t((1-t)*6+t*4))+t((1-t)((1-t)*6+t*4)+t((1-t)*4+t*0)), (1-t)((1-t)((1-t)*6+t*2)+t((1-t)*2+t*10))+t((1-t)((1-t)*2+t*10)+t((1-t)*10+t*6)))
+  var t = TransC*0.01;
+  //var x0=10, y0=6, x1=6, y1=2, x2=4, y2=10, x3=0, y3=6;
+  var x0=75, y0=0, x1=0, y1=-100, x2=0, y2=100, x3=-75, y3=0;
+  var x = (1-t)*((1-t)*((1-t)*x0 + t*x1) + t*((1-t)*x1 + t*x2)) + t*((1-t)*((1-t)*x1 + t*x2) + t*((1-t)*x2 + t*x3));
+  var y = (1-t)*((1-t)*((1-t)*y0 + t*y1) + t*((1-t)*y1 + t*y2)) + t*((1-t)*((1-t)*y1+t*y2) + t*((1-t)*y2 + t*y3));
+
+  matrix = m4.translate(matrix, x, y, 0);
 
   return matrix;
 }
@@ -97,6 +109,7 @@ function computeMatrix1(localMatrix) {
   var point = [0,-40,0];
   var pRotation = degToRad(config.rotateP*3.6);
   matrix = pointRotation(matrix, point, pRotation);
+  matrix = splineCurve(matrix, 100-config.TransC);
 
   return m4.scale(matrix, scale, scale, scale);
 }
@@ -139,11 +152,26 @@ function computeMatrixCam1(cam) {
     var modelPosition = [config.TransX, config.TransY, config.TransZ];
     var zoom = m4.distance(cameraPosition,modelPosition);
     zoom = (75-zoom)+(50-configCam.zoom);
-    
+
+    var matrix = m4.identity();
     target = [config.TransX+0.001, config.TransY+0.001, config.TransZ*0];
+    matrix = pointRotation(matrix,[0,-40,0],degToRad(config.rotateP*3.6));
+    target = m4.addVectors(target,[matrix[12],matrix[13],matrix[14]]);
+    matrix = m4.identity();
+    matrix = splineCurve(matrix,config.TransC);
+    target = m4.subtractVectors(target,[matrix[12],matrix[13],matrix[14]]);
+    //target = m4.subtractVectors([0,0,0],target);
+
+
+    // target[0] = target[0] - matrix[12];
+    // target[1] = target[1] - matrix[13];
+    // target[2] = target[2] - matrix[14];
+
+    //target = [75,0,0];
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
-    cameraMatrix = pointRotation(cameraMatrix,[0,-40,0],degToRad(config.rotateP*3.6));
+    //cameraMatrix = pointRotation(cameraMatrix,[0,-40,0],degToRad(config.rotateP*3.6));
     cameraMatrix = m4.translate(cameraMatrix,0,0,zoom);
+    //cameraMatrix = splineCurve(cameraMatrix,config.TransC);
   }
   if(configCam.lookAtPoint==false && configCam.lookAtModel==false){
     target = [configCam.TransX+0.001, configCam.TransY+0.001, configCam.TransZ*0];
