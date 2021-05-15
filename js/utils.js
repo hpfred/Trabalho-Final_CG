@@ -85,15 +85,13 @@ function pointRotation(matrix, point, pRotation){
 
   return matrix;
 }
-function splineCurve(matrix, TransC){
-  //((1-t)((1-t)((1-t)*10+t*6)+t((1-t)*6+t*4))+t((1-t)((1-t)*6+t*4)+t((1-t)*4+t*0)), (1-t)((1-t)((1-t)*6+t*2)+t((1-t)*2+t*10))+t((1-t)((1-t)*2+t*10)+t((1-t)*10+t*6)))
+function splineCurve(matrix, TransC, x, y){
   var t = TransC*0.01;
-  //var x0=10, y0=6, x1=6, y1=2, x2=4, y2=10, x3=0, y3=6;
-  var x0=75, y0=0, x1=0, y1=-100, x2=0, y2=100, x3=-75, y3=0;
-  var x = (1-t)*((1-t)*((1-t)*x0 + t*x1) + t*((1-t)*x1 + t*x2)) + t*((1-t)*((1-t)*x1 + t*x2) + t*((1-t)*x2 + t*x3));
-  var y = (1-t)*((1-t)*((1-t)*y0 + t*y1) + t*((1-t)*y1 + t*y2)) + t*((1-t)*((1-t)*y1+t*y2) + t*((1-t)*y2 + t*y3));
+  //var x0=75, y0=0, x1=0, y1=-100, x2=0, y2=100, x3=-75, y3=0;
+  var xout = (1-t)*((1-t)*((1-t)*x[0] + t*x[1]) + t*((1-t)*x[1] + t*x[2])) + t*((1-t)*((1-t)*x[1] + t*x[2]) + t*((1-t)*x[2] + t*x[3]));
+  var yout = (1-t)*((1-t)*((1-t)*y[0] + t*y[1]) + t*((1-t)*y[1] + t*y[2])) + t*((1-t)*((1-t)*y[1]+t*y[2]) + t*((1-t)*y[2] + t*y[3]));
 
-  matrix = m4.translate(matrix, x, y, 0);
+  matrix = m4.translate(matrix, xout, yout, 0);
 
   return matrix;
 }
@@ -109,7 +107,7 @@ function computeMatrix1(localMatrix) {
   var point = [0,-40,0];
   var pRotation = degToRad(config.rotateP*3.6);
   matrix = pointRotation(matrix, point, pRotation);
-  matrix = splineCurve(matrix, 100-config.TransC);
+  matrix = splineCurve(matrix, 100-config.TransC, [75,0,0,-75], [0,-100,100,0]);
 
   return m4.scale(matrix, scale, scale, scale);
 }
@@ -143,7 +141,7 @@ function computeMatrixCam1(cam) {
   var transZ = configCam.TransZ*2;
   var cameraPosition = [configCam.TransX, configCam.TransY, transZ];
   var matrix = m4.identity();
-  matrix = splineCurve(matrix,50-configCam.TransC);
+  matrix = splineCurve(matrix,50-configCam.TransC,  [0,-100,100,0], [-40,0,0,40]);//[20,-100,100,40], [-30,0,0,30]);//[0,-70,70,0], [-30,0,0,30]);
   cameraPosition = m4.addVectors(cameraPosition,[matrix[12],matrix[13],matrix[14]]);
 
   var point = [-40,0,0];
@@ -162,13 +160,13 @@ function computeMatrixCam1(cam) {
     matrix = pointRotation(matrix,[0,-40,0],degToRad(config.rotateP*3.6));
     target = m4.addVectors(target,[matrix[12],matrix[13],matrix[14]]);
     matrix = m4.identity();
-    matrix = splineCurve(matrix,config.TransC);
+    matrix = splineCurve(matrix,config.TransC, [75,0,0,-75], [0,-100,100,0]);
     target = m4.subtractVectors(target,[matrix[12],matrix[13],matrix[14]]);
 
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
     //cameraMatrix = pointRotation(cameraMatrix,[0,-40,0],degToRad(config.rotateP*3.6));
     cameraMatrix = m4.translate(cameraMatrix,0,0,zoom);
-    //cameraMatrix = splineCurve(cameraMatrix,config.TransC);
+    //cameraMatrix = splineCurve(cameraMatrix,config.TransC, [75,0,0,-75], [0,-100,100,0]);
   }
   if(configCam.lookAtPoint==false && configCam.lookAtModel==false){
     target = [configCam.TransX+0.001+matrix[12], configCam.TransY+0.001+matrix[13], configCam.TransZ*0];
