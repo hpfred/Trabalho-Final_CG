@@ -1,10 +1,13 @@
-/// Trabalho 1 - CG : Mudar posicoes usando uma interface
+/// Trabalho 2 - CG : Pong
 /// Frederico Peixoto Antunes
 
 function main() {
   const { gl, programInfo } = initializeWorld();
   
-  const cubeBufferInfo = flattenedPrimitives.createCubeBufferInfo(gl, 20);
+  const cubeBufferInfo = flattenedPrimitives.createCylinderBufferInfo(gl, 5, 20, 4, 1);
+  //const cubeBufferInfo = flattenedPrimitives.createPlaneBufferInfo(gl, 20, 10); //Tem que ser visto de cima
+  //const cubeBufferInfo = flattenedPrimitives.createCubeBufferInfo(gl, 20);
+  //const sphereBufferInfo = flattenedPrimitives.createSphereBufferInfo(gl,20,12,6);
   
   const cubeVAO = twgl.createVAOFromBufferInfo(
     gl,
@@ -80,12 +83,32 @@ function main() {
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
 
+    canvas.addEventListener('keydown', (e) => {
+      //problema de quanto mais vezes eh chamado, mais rapido fica
+    
+      if(e.keyCode == 38 && config.TransY<50){
+        // console.log(e);
+        config.TransY += 0.001;
+      }
+      if(e.keyCode == 40&& config.TransY>-50){
+        // console.log(e);
+        config.TransY -= 0.001;
+      }
+    });
+
     ///Colors the background, in this case, to black. Not necessary.
     //gl.clearColor(0, 0, 0, 1);
     //gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
+    // projectionMatrix[0] = 1;
+    // projectionMatrix[5] = 1;
+    // projectionMatrix[10] = 1;
+    // projectionMatrix[14] = 1;
+    var projectionMatrix = m4.projectiom(gl.canvas.clientWidth, gl.canvas.clientHeight, 400);
+    //fudgefactor = 0 <<<
+    //var projectionMatrix = aspect;
 
     //Checks selected camera and calculates it's matrix [using look at] calling 'computeMatrixCam1' function
     if(configCam.selectCam1 == true){
