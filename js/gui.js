@@ -1,10 +1,10 @@
-var config = {  rotateX: 0,
-                rotateY: 0,
+var paddleVar1 = {  rotateX: 0,
+                rotateY: 45/3.6,
                 rotateZ: 0,
                 rotateP: 0,
-                scale: 30,
-                TransX: 0,
-                TransY: 0,
+                scale: 25,
+                TransX: 1.6,  //(paddleWidth/2),  //0+1.6,
+                TransY: 8.8,  //paddleHeight/2, //0+8.8,
                 TransZ: 0,
                 TransC: 0,
                 animate: function() {
@@ -16,6 +16,44 @@ var config = {  rotateX: 0,
                 removeModel: function() {
                   rmvModel();
                 },
+};
+var paddleVar2 = {  rotateX: 0,
+  rotateY: 45/3.6,
+  rotateZ: 0,
+  rotateP: 0,
+  scale: 25,
+  TransX: 0,  //(paddleWidth/2),  //0+1.6,
+  TransY: 0,  //paddleHeight/2, //0+8.8,
+  TransZ: 0,
+  TransC: 0,
+  animate: function() {
+    requestAnimationFrame(animate);
+  },
+  addModel: function() {
+    addModel();
+  },
+  removeModel: function() {
+    rmvModel();
+  },
+};
+var ballVar = {  rotateX: 270/3.6,
+  rotateY: 45/3.6,
+  rotateZ: 0,
+  rotateP: 0,
+  scale: 25,
+  TransX: 0,  //(paddleWidth/2),  //0+1.6,
+  TransY: 0,  //paddleHeight/2, //0+8.8,
+  TransZ: 0,
+  TransC: 0,
+  animate: function() {
+    requestAnimationFrame(animate);
+  },
+  addModel: function() {
+    addModel();
+  },
+  removeModel: function() {
+    rmvModel();
+  },
 };
 var configCam = { rotateX: 0,
                   rotateY: 0,
@@ -46,24 +84,24 @@ const loadGUI = () => {
   var guiModTrans = guiMod.addFolder("Translation");
   var guiModTransLin = guiModTrans.addFolder("Linear");
   guiModTransLin.open();
-  guiModTransLin.add(config, "TransX", -50, 50, 0.1).listen().name("X Axis");
-  guiModTransLin.add(config, "TransY", -50, 50, 0.1).listen().name("Y Axis");
-  guiModTransLin.add(config, "TransZ", -50, 50, 0.1).listen().name("Z Axis");
-  guiModTrans.add(config, "TransC", -50, 50, 0.1).listen().name("Curve");
+  guiModTransLin.add(ballVar, "TransX", -50, 50, 0.1).listen().name("X Axis");
+  guiModTransLin.add(ballVar, "TransY", -50, 50, 0.1).listen().name("Y Axis");
+  guiModTransLin.add(ballVar, "TransZ", -50, 50, 0.1).listen().name("Z Axis");
+  guiModTrans.add(paddleVar1, "TransC", -50, 50, 0.1).listen().name("Curve");
     ///Folder for rotation arround axis and point
   var guiModRot = guiMod.addFolder("Rotate");
   var guiModRotAxis = guiModRot.addFolder("Axis");
   guiModRotAxis.open();
-  guiModRotAxis.add(config, "rotateX", 0, 100, 0.1).listen().name("X Axis");
-  guiModRotAxis.add(config, "rotateY", 0, 100, 0.1).listen().name("Y Axis");
-  guiModRotAxis.add(config, "rotateZ", 0, 100, 0.1).listen().name("Z Axis");
-  guiModRot.add(config, "rotateP", 0, 100, 0.1).listen().name("Point");
-  guiMod.add(config, "scale", 0, 100, 0.1).listen();  
+  guiModRotAxis.add(ballVar, "rotateX", 0, 100, 0.1).listen().name("X Axis");
+  guiModRotAxis.add(ballVar, "rotateY", 0, 100, 0.1).listen().name("Y Axis");
+  guiModRotAxis.add(ballVar, "rotateZ", 0, 100, 0.1).listen().name("Z Axis");
+  guiModRot.add(paddleVar1, "rotateP", 0, 100, 0.1).listen().name("Point");
+  guiMod.add(paddleVar1, "scale", 0, 100, 0.1).listen();  
     ///Calls function that plays animation
-  guiMod.add(config, "animate").name("Animate");
+  guiMod.add(paddleVar1, "animate").name("Animate");
     ///Calls function that creates and destroys new model new model
-  guiMod.add(config, "addModel").name("Add Model");
-  guiMod.add(config, "removeModel").name("Remove Model");
+  guiMod.add(paddleVar1, "addModel").name("Add Model");
+  guiMod.add(paddleVar1, "removeModel").name("Remove Model");
 
     ///Interface for camera transformations
   var guiCam = gui.addFolder("Camera");

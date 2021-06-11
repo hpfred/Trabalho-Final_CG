@@ -65,15 +65,15 @@ const radToDeg = (r) => (r * 180) / Math.PI;
 
 //Creates global scope flags
 var onChange = false;
-var add1=false;
-var rmv1=false;
+// var add1=false;
+// var rmv1=false;
 //Functions that sets flag as true on button click, to be used on render time to add or remove model to draw list
-function addModel(){
-  add1 = true;
-}
-function rmvModel(){
-  rmv1 = true;
-}
+// function addModel(){
+//   add1 = true;
+// }
+// function rmvModel(){
+//   rmv1 = true;
+// }
 
 function pointRotation(matrix, point, pRotation){
   //Translate
@@ -95,34 +95,67 @@ function splineCurve(matrix, TransC, x, y){
   return matrix;
 }
 function computeMatrix1(localMatrix) {
-  var scale = (config.scale*0.027)+0.2;
+  var scale = (paddleVar1.scale*0.027)+0.2;
+  var xRotation = degToRad(paddleVar1.rotateX*3.6);
+  var yRotation = degToRad(paddleVar1.rotateY*3.6);
+  var zRotation = degToRad(paddleVar1.rotateZ*3.6);
   var matrix = m4.translate(
     localMatrix,
-    config.TransX,
-    config.TransY,
-    config.TransZ,
+    paddleVar1.TransX,
+    paddleVar1.TransY,
+    paddleVar1.TransZ,
   );
 
   var point = [0,-40,0];
-  var pRotation = degToRad(config.rotateP*3.6);
+  var pRotation = degToRad(paddleVar1.rotateP*3.6);
   matrix = pointRotation(matrix, point, pRotation);
-  matrix = splineCurve(matrix, 50-config.TransC, [75,0,0,-75], [0,-100,100,0]);
-
+  matrix = splineCurve(matrix, 50-paddleVar1.TransC, [75,0,0,-75], [0,-100,100,0]);
+  matrix = m4.xRotate(matrix, xRotation);
+  matrix = m4.yRotate(matrix, yRotation);
+  matrix = m4.zRotate(matrix, zRotation);
   return m4.scale(matrix, scale, scale, scale);
 }
 function computeMatrix2(localMatrix) {
-  var xRotation = degToRad(config.rotateX*3.6);
-  var yRotation = degToRad(config.rotateY*3.6);
-  var zRotation = degToRad(config.rotateZ*3.6);
+  var scale = (paddleVar2.scale*0.027)+0.2;
+  var xRotation = degToRad(paddleVar2.rotateX*3.6);
+  var yRotation = degToRad(paddleVar2.rotateY*3.6);
+  var zRotation = degToRad(paddleVar2.rotateZ*3.6);
   var matrix = m4.translate(
     localMatrix,
-    0,
-    0,
-    0,
+    paddleVar2.TransX,
+    paddleVar2.TransY,
+    paddleVar2.TransZ,
   );
-  var xRot = m4.xRotate(matrix, xRotation);
-  var yRot = m4.yRotate(xRot, yRotation);
-  return m4.zRotate(yRot, zRotation);
+
+  var point = [0,-40,0];
+  var pRotation = degToRad(paddleVar2.rotateP*3.6);
+  matrix = pointRotation(matrix, point, pRotation);
+  matrix = splineCurve(matrix, 50-paddleVar2.TransC, [75,0,0,-75], [0,-100,100,0]);
+  matrix = m4.xRotate(matrix, xRotation);
+  matrix = m4.yRotate(matrix, yRotation);
+  matrix = m4.zRotate(matrix, zRotation);
+  return m4.scale(matrix, scale, scale, scale);
+}
+function computeMatrix3(localMatrix) {
+  var scale = (ballVar.scale*0.027)+0.2;
+  var xRotation = degToRad(ballVar.rotateX*3.6);
+  var yRotation = degToRad(ballVar.rotateY*3.6);
+  var zRotation = degToRad(ballVar.rotateZ*3.6);
+  var matrix = m4.translate(
+    localMatrix,
+    ballVar.TransX,
+    ballVar.TransY,
+    ballVar.TransZ,
+  );
+
+  var point = [0,-40,0];
+  var pRotation = degToRad(ballVar.rotateP*3.6);
+  matrix = pointRotation(matrix, point, pRotation);
+  matrix = splineCurve(matrix, 50-ballVar.TransC, [75,0,0,-75], [0,-100,100,0]);
+  matrix = m4.xRotate(matrix, xRotation);
+  matrix = m4.yRotate(matrix, yRotation);
+  matrix = m4.zRotate(matrix, zRotation);
+  return m4.scale(matrix, scale, scale, scale);
 }
 function computeMatrixCam1(cam) {
   var target = [0, 0, 0];
@@ -150,7 +183,7 @@ function computeMatrixCam1(cam) {
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
   }
   if(configCam.lookAtModel==true){
-    var modelPosition = [config.TransX, config.TransY, config.TransZ];
+    var modelPosition = [paddleVar1.TransX, paddleVar1.TransY, paddleVar1.TransZ];
     //Zoom is proportional to the distance between the camera and the model
     //but the proportional nature might break in some situation with some camera and model positions/angles
     var zoom = m4.distance(cameraPosition,modelPosition);
@@ -159,11 +192,11 @@ function computeMatrixCam1(cam) {
     //Sometimes the 'look at model' might break with some camera and model positions/angles
     //specifically having simultaneously rotation around a point and curve translation made the 'look at' break (appears to have stopped/been fixed)
     matrix = m4.identity();
-    target = [config.TransX+0.001, config.TransY+0.001, config.TransZ*0];
-    matrix = pointRotation(matrix,[0,-40,0],degToRad(config.rotateP*3.6));
+    target = [paddleVar1.TransX+0.001, paddleVar1.TransY+0.001, paddleVar1.TransZ*0];
+    matrix = pointRotation(matrix,[0,-40,0],degToRad(paddleVar1.rotateP*3.6));
     target = m4.addVectors(target,[matrix[12],matrix[13],matrix[14]]);
     matrix = m4.identity();
-    matrix = splineCurve(matrix,50+config.TransC, [75,0,0,-75], [0,-100,100,0]);
+    matrix = splineCurve(matrix,50+paddleVar1.TransC, [75,0,0,-75], [0,-100,100,0]);
     target = m4.subtractVectors(target,[matrix[12],matrix[13],matrix[14]]);
 
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
@@ -190,9 +223,9 @@ function animate(now){
   var aniSpeed = 5;
 
   requestAnimationFrame(aniRot1);
-  if(config.rotateX==rot1)
+  if(paddleVar1.rotateX==rot1)
     requestAnimationFrame(aniTrans1);
-  if(config.TransX==trans1)
+  if(paddleVar1.TransX==trans1)
     requestAnimationFrame(aniRot2);
   
   function aniRot1(now){
@@ -200,21 +233,21 @@ function animate(now){
     var dTime = now - then;
     then = now;
 
-    if(config.rotateX<rot1){
-      config.rotateX += dTime*aniSpeed;
-      if(config.rotateX<rot1)
+    if(paddleVar1.rotateX<rot1){
+      paddleVar1.rotateX += dTime*aniSpeed;
+      if(paddleVar1.rotateX<rot1)
       requestAnimationFrame(aniRot1);
       else{
-        config.rotateX = rot1;
+        paddleVar1.rotateX = rot1;
         requestAnimationFrame(aniTrans1);
       }
     }
-    else if(config.rotateX>rot1){
-      config.rotateX -= dTime*aniSpeed;
-      if(config.rotateX>rot1)
+    else if(paddleVar1.rotateX>rot1){
+      paddleVar1.rotateX -= dTime*aniSpeed;
+      if(paddleVar1.rotateX>rot1)
       requestAnimationFrame(aniRot1);
       else{
-        config.rotateX = rot1;
+        paddleVar1.rotateX = rot1;
         requestAnimationFrame(aniTrans1);
       }
     }
@@ -225,21 +258,21 @@ function animate(now){
     var dTime = now - then;
     then = now;
 
-    if(config.TransX<trans1){
-      config.TransX += dTime*aniSpeed;
-      if(config.TransX<trans1)
+    if(paddleVar1.TransX<trans1){
+      paddleVar1.TransX += dTime*aniSpeed;
+      if(paddleVar1.TransX<trans1)
       requestAnimationFrame(aniTrans1);
       else{
-        config.TransX = trans1;
+        paddleVar1.TransX = trans1;
         requestAnimationFrame(aniRot2);
       }
     }
-    else if(config.TransX>trans1){
-      config.TransX -= dTime*aniSpeed;
-      if(config.TransX>trans1)
+    else if(paddleVar1.TransX>trans1){
+      paddleVar1.TransX -= dTime*aniSpeed;
+      if(paddleVar1.TransX>trans1)
       requestAnimationFrame(aniTrans1);
       else{
-        config.TransX = trans1;
+        paddleVar1.TransX = trans1;
         requestAnimationFrame(aniRot2);
       }
     }
@@ -250,17 +283,17 @@ function animate(now){
     var dTime = now - then;
     then = now;
 
-    if(config.rotateY<rot2){
-      config.rotateY += dTime*aniSpeed;
-      if(config.rotateY<rot2)
+    if(paddleVar1.rotateY<rot2){
+      paddleVar1.rotateY += dTime*aniSpeed;
+      if(paddleVar1.rotateY<rot2)
         requestAnimationFrame(aniRot2);
-      else config.rotateY = rot2;
+      else paddleVar1.rotateY = rot2;
     }
-    else if(config.rotateY>rot2){
-      config.rotateY -= dTime*aniSpeed;
-      if(config.rotateY>rot2)
+    else if(paddleVar1.rotateY>rot2){
+      paddleVar1.rotateY -= dTime*aniSpeed;
+      if(paddleVar1.rotateY>rot2)
         requestAnimationFrame(aniRot2);
-      else config.rotateY = rot2;
+      else paddleVar1.rotateY = rot2;
     }
   }
 }
