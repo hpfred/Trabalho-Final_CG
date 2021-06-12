@@ -136,6 +136,9 @@ function main() {
     //-----------------------------------------------------------------------------------------------
 
     ///Checa colisoes paredes
+    if((ballVar.TransY-(paddleWidth/2) <= 0) || (ballVar.TransY+(paddleWidth/2) >= gl.canvas.clientHeight/10)){
+      ballVar.dy = (-1)*ballVar.dy;
+    }
     paddleColision();
 
     ///Move bola

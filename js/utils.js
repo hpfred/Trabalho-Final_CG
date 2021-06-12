@@ -493,12 +493,10 @@ function playBall(){
 }
 
 function paddleColision(){
-  if((ballVar.TransY-(paddleWidth/2) <= 0) || (ballVar.TransY+(paddleWidth/2) >= gl.canvas.clientHeight/10)){
-    ballVar.dy = (-1)*ballVar.dy;
-  }
   ///Checa colisoes paddle1
   //verifica se chegou na linha de paddle
-  if(ballVar.TransX-(gl.canvas.clientWidth/10) <= paddleWidth/2){
+  //if(ballVar.TransX-(gl.canvas.clientWidth/10) <= paddleWidth/2){
+  if(ballVar.TransX-(paddleWidth/2) <= paddleWidth/2){
     //se na linha de paddle, testa colisão
     //lógica >= e <= invertida?
     if((paddleVar1.TransY - paddleHeight/2 <= (ballVar.TransY+paddleWidth/2)) 
@@ -506,18 +504,19 @@ function paddleColision(){
       //nova direção da bola
       ballVar.dx = (-1)*ballVar.dx;
       //corrige erro
-      ballVar.TransX+=Math.sign(ballVar.dx)*8;
+      //ballVar.TransX+=Math.sign(ballVar.dx)*8;
       //slice
     }
   }
   ///Checa colisoes paddle2
-  if(ballVar.TransX >= (gl.canvas.clientWidth/10)-(paddleWidth/2)){
+  //if(ballVar.TransX >= (gl.canvas.clientWidth/10)-(paddleWidth/2)){
+  if(ballVar.TransX+(paddleWidth/2) >= (gl.canvas.clientWidth/10)-paddleWidth/2){
     if((paddleVar2.TransY - paddleHeight/2 <= (ballVar.TransY+paddleWidth/2)) 
     && paddleVar2.TransY + paddleHeight/2 >= (ballVar.TransY-paddleWidth/2)){
       //nova direção da bola
       ballVar.dx = (-1)*ballVar.dx;
       //corrige erro
-      ballVar.TransX+=Math.sign(ballVar.dx)*8;
+      //ballVar.TransX+=Math.sign(ballVar.dx)*8;
       //slice
     }
   }
