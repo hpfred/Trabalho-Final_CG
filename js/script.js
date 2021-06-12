@@ -2,21 +2,23 @@
 /// Frederico Peixoto Antunes
 
 var paddleHeight = 20;
-var paddleWidth = 2.5;  //5
+var paddleWidth = 5;  //2.5
 
+var speed = 0.5;
+var p1score = 0, p2score = 0;
 var inv = 1;
 
+const { gl, programInfo } = initializeWorld();
 function main() {
-  const { gl, programInfo } = initializeWorld();
   
-  const paddleBufferInfo = flattenedPrimitives.createCylinderBufferInfo(gl, paddleWidth, paddleHeight, 4, 1);
-  const ballBufferInfo = flattenedPrimitives.createDiscBufferInfo(gl, paddleWidth, 20);
+  //const paddleBufferInfo = flattenedPrimitives.createCylinderBufferInfo(gl, paddleWidth/2, paddleHeight, 4, 1);
+  const paddleBufferInfo = flattenedPrimitives.createPlaneBufferInfo(gl, paddleHeight, paddleWidth/2);
+  const ballBufferInfo = flattenedPrimitives.createDiscBufferInfo(gl, paddleWidth/2, 20);
   //Testes de formas de modelo - IGNORAR
   //const paddleBufferInfo = flattenedPrimitives.createPlaneBufferInfo(gl, 20, 10); //Tem que ser visto de cima
-  //const paddleBufferInfo = flattenedPrimitives.createpaddleBufferInfo(gl, 20);
   //const sphereBufferInfo = flattenedPrimitives.createSphereBufferInfo(gl,20,12,6);
   
-  const cubeVAO = twgl.createVAOFromBufferInfo(
+  const VAO = twgl.createVAOFromBufferInfo(
     gl,
     programInfo,
     paddleBufferInfo,
@@ -30,29 +32,29 @@ function main() {
   var paddle1 = new Node();
   paddle1.drawInfo = {
     uniforms: {
-      u_colorMult: [0.5, 0.5, 1, 1],
+      u_color: [0.5, 0.5, 1, 1],//u_colorMult: [0.5, 0.5, 1, 1],
     },
     programInfo: programInfo,
     bufferInfo: paddleBufferInfo,
-    vertexArray: cubeVAO,
+    vertexArray: VAO,
   };
   var paddle2 = new Node();
   paddle2.drawInfo = {
     uniforms: {
-      u_colorMult: [0.5, 0.5, 1, 1],
+      u_color: [0.5, 0.5, 1, 1],//u_colorMult: [0.5, 0.5, 1, 1],
     },
     programInfo: programInfo,
     bufferInfo: paddleBufferInfo,
-    vertexArray: cubeVAO,
+    vertexArray: VAO,
   };
   var ball = new Node();
   ball.drawInfo = {
     uniforms: {
-      u_colorMult: [1, 1, 1, 1],
+      u_color: [1, 1, 1, 1],//u_colorMult: [0.5, 0.5, 1, 1],
     },
     programInfo: programInfo,
     bufferInfo: ballBufferInfo,
-    vertexArray: cubeVAO,
+    vertexArray: VAO,
   };
 
   var objectsToDraw = [paddle1.drawInfo, paddle2.drawInfo, ball.drawInfo, ];
@@ -65,7 +67,7 @@ function main() {
   //   },
   //   programInfo: programInfo,
   //   bufferInfo: paddleBufferInfo,
-  //   vertexArray: cubeVAO,
+  //   vertexArray: VAO,
   // };
   // cube2.setParent(paddle1);
   // var cube3 = new Node();
@@ -75,20 +77,22 @@ function main() {
   //   },
   //   programInfo: programInfo,
   //   bufferInfo: paddleBufferInfo,
-  //   vertexArray: cubeVAO,
+  //   vertexArray: VAO,
   // };
   // cube3.setParent(paddle1);
 
   var objects = [paddle1, paddle2, ball, ];
 
-  loadGUI();
+  // loadGUI();
   
-  paddleVar2.TransX = 138.2;//gl.canvas.clientWidth/10;
-  paddleVar2.TransY = paddleHeight/2;
+  paddleVar1.TransX = paddleWidth/2;
   paddleVar1.TransY = paddleHeight/2;
-  ballVar.TransX = gl.canvas.clientWidth/20;
-  ballVar.TransY = gl.canvas.clientHeight/20;
-  
+  paddleVar2.TransX = (gl.canvas.clientWidth/10)-(paddleWidth/2);//138.2;//gl.canvas.clientWidth/10;
+  paddleVar2.TransY = paddleHeight/2;
+  // ballVar.TransX = gl.canvas.clientWidth/20;
+  // ballVar.TransY = gl.canvas.clientHeight/20;
+  centerBall();
+
   console.log(gl.canvas.clientHeight, gl.canvas.clientWidth);
 
   var cam1 = new Camera();
@@ -108,35 +112,40 @@ function main() {
 
     //----------------------------------------------------------------------------------------------- eventListener
     //Captures keyboard input
-    canvas.addEventListener('keydown', (e) => {
-      //problema de quanto mais vezes eh chamado, mais rapido fica
-      //console.log(e);
-      if(e.keyCode == 38 && paddleVar1.TransY>0+(paddleHeight/2)){
-        // console.log(e);
-        paddleVar1.TransY -= 0.001;
-      }
-      if(e.keyCode == 40 && paddleVar1.TransY<(gl.canvas.clientHeight/10)-(paddleHeight/2)){
-        // console.log(e);
-        paddleVar1.TransY += 0.001;
-      }
-      if(e.keyCode == 87 && paddleVar2.TransY>0+(paddleHeight/2)){
-        // console.log(e);
-        paddleVar2.TransY -= 0.001;
-      }
-      if(e.keyCode == 83 && paddleVar2.TransY<(gl.canvas.clientHeight/10)-(paddleHeight/2)){
-        // console.log(e);
-        paddleVar2.TransY += 0.001;
-      }
-    });
+    // document.addEventListener('keydown', (e) => {
+    //   //problema de quanto mais vezes eh chamado, mais rapido fica
+    //   //console.log(e);
+    //   if(e.keyCode == 38 && paddleVar1.TransY>0+(paddleHeight/2)){
+    //     // console.log(e);
+    //     paddleVar1.TransY -= 0.001;
+    //   }
+    //   if(e.keyCode == 40 && paddleVar1.TransY<(gl.canvas.clientHeight/10)-(paddleHeight/2)){
+    //     // console.log(e);
+    //     paddleVar1.TransY += 0.001;
+    //   }
+    //   if(e.keyCode == 87 && paddleVar2.TransY>0+(paddleHeight/2)){
+    //     // console.log(e);
+    //     paddleVar2.TransY -= 0.001;
+    //   }
+    //   if(e.keyCode == 83 && paddleVar2.TransY<(gl.canvas.clientHeight/10)-(paddleHeight/2)){
+    //     // console.log(e);
+    //     paddleVar2.TransY += 0.001;
+    //   }
+    // });
+    runButtons();
     //-----------------------------------------------------------------------------------------------
 
+    ///Checa colisoes paredes
+    paddleColision();
+
     ///Move bola
+    moveBall();
     //var inv = 1;
-    ballVar.TransY += 0.1*inv;
-    if(ballVar.TransY>64.5)//(gl.canvas.clientHeight/10)-(paddleHeight/2))
-      inv=-1;
-    if(ballVar.TransY<paddleWidth/2+2)
-      inv=1;
+    // ballVar.TransY += 0.1*inv;
+    // if(ballVar.TransY>64.5)//(gl.canvas.clientHeight/10)-(paddleHeight/2))
+    //   inv=-1;
+    // if(ballVar.TransY<paddleWidth/2+2)
+    //   inv=1;
 
     ///Colors the background, in this case, to black. Not necessary.
     gl.clearColor(0, 0, 0, 1);
@@ -223,6 +232,18 @@ function main() {
     });
      
     twgl.drawObjectList(gl, objectsToDraw);
+
+    ///Checa ponto
+    if(ballVar.TransX+paddleWidth/2<=0){
+      p1score++;
+      centerBall();
+      console.log(p1score);
+    } 
+    if(ballVar.TransX-paddleWidth/2>=gl.canvas.clientWidth/10){
+      p2score++;
+      centerBall();
+      console.log(p2score);
+    }
 	requestAnimationFrame(render);
   }
 

@@ -106,10 +106,10 @@ function computeMatrix1(localMatrix) {
     paddleVar1.TransZ,
   );
 
-  var point = [0,-40,0];
-  var pRotation = degToRad(paddleVar1.rotateP*3.6);
-  matrix = pointRotation(matrix, point, pRotation);
-  matrix = splineCurve(matrix, 50-paddleVar1.TransC, [75,0,0,-75], [0,-100,100,0]);
+  // var point = [0,-40,0];
+  // var pRotation = degToRad(paddleVar1.rotateP*3.6);
+  // matrix = pointRotation(matrix, point, pRotation);
+  // matrix = splineCurve(matrix, 50-paddleVar1.TransC, [75,0,0,-75], [0,-100,100,0]);
   matrix = m4.xRotate(matrix, xRotation);
   matrix = m4.yRotate(matrix, yRotation);
   matrix = m4.zRotate(matrix, zRotation);
@@ -127,10 +127,10 @@ function computeMatrix2(localMatrix) {
     paddleVar2.TransZ,
   );
 
-  var point = [0,-40,0];
-  var pRotation = degToRad(paddleVar2.rotateP*3.6);
-  matrix = pointRotation(matrix, point, pRotation);
-  matrix = splineCurve(matrix, 50-paddleVar2.TransC, [75,0,0,-75], [0,-100,100,0]);
+  // var point = [0,-40,0];
+  // var pRotation = degToRad(paddleVar2.rotateP*3.6);
+  // matrix = pointRotation(matrix, point, pRotation);
+  // matrix = splineCurve(matrix, 50-paddleVar2.TransC, [75,0,0,-75], [0,-100,100,0]);
   matrix = m4.xRotate(matrix, xRotation);
   matrix = m4.yRotate(matrix, yRotation);
   matrix = m4.zRotate(matrix, zRotation);
@@ -148,10 +148,10 @@ function computeMatrix3(localMatrix) {
     ballVar.TransZ,
   );
 
-  var point = [0,-40,0];
-  var pRotation = degToRad(ballVar.rotateP*3.6);
-  matrix = pointRotation(matrix, point, pRotation);
-  matrix = splineCurve(matrix, 50-ballVar.TransC, [75,0,0,-75], [0,-100,100,0]);
+  // var point = [0,-40,0];
+  // var pRotation = degToRad(ballVar.rotateP*3.6);
+  // matrix = pointRotation(matrix, point, pRotation);
+  // matrix = splineCurve(matrix, 50-ballVar.TransC, [75,0,0,-75], [0,-100,100,0]);
   matrix = m4.xRotate(matrix, xRotation);
   matrix = m4.yRotate(matrix, yRotation);
   matrix = m4.zRotate(matrix, zRotation);
@@ -437,4 +437,92 @@ function animateCam(now){
       }
     }
   }
+}
+
+const controller = {
+  87:  {pressed: false, func: moveUp1},
+  83:  {pressed: false, func: moveDown1},
+  38:  {pressed: false, func: moveUp2},
+  40:  {pressed: false, func: moveDown2},
+  32:  {pressed: false, func: playBall},
+}
+const handleKeyDown = (e) => {
+  if(controller[e.keyCode])
+    controller[e.keyCode].pressed = true;
+}
+const handleKeyUp = (e) => {
+  if(controller[e.keyCode])
+    controller[e.keyCode].pressed = false;
+}
+document.addEventListener('keydown',handleKeyDown);
+document.addEventListener('keyup',handleKeyUp);
+function moveUp1(){
+  if(paddleVar1.TransY > paddleHeight/2)
+    paddleVar1.TransY -= speed;
+}
+function moveDown1(){
+  if(paddleVar1.TransY<(gl.canvas.clientHeight/10)-(paddleHeight/2))
+    paddleVar1.TransY += speed;
+}
+function moveUp2(){
+  if(paddleVar2.TransY > paddleHeight/2)
+    paddleVar2.TransY -= speed;
+}
+function moveDown2(){
+  if(paddleVar2.TransY<(gl.canvas.clientHeight/10)-(paddleHeight/2))
+    paddleVar2.TransY += speed;
+}
+function runButtons(){
+  Object.keys(controller).forEach(key => {
+    if(controller[key].pressed){  
+      controller[key].func();
+    }
+  })
+}
+
+function centerBall(){
+  ballVar.TransX = gl.canvas.clientWidth/20;
+  ballVar.TransY = gl.canvas.clientHeight/20;
+  ballVar.dx = 0;
+  ballVar.dy = 0;
+}
+function playBall(){
+  //só quando jogo estiver parado
+  ballVar.dx = -speed;
+  ballVar.dy = speed;
+}
+
+function paddleColision(){
+  if((ballVar.TransY-(paddleWidth/2) <= 0) || (ballVar.TransY+(paddleWidth/2) >= gl.canvas.clientHeight/10)){
+    ballVar.dy = (-1)*ballVar.dy;
+  }
+  ///Checa colisoes paddle1
+  //verifica se chegou na linha de paddle
+  if(ballVar.TransX-(gl.canvas.clientWidth/10) <= paddleWidth/2){
+    //se na linha de paddle, testa colisão
+    //lógica >= e <= invertida?
+    if((paddleVar1.TransY - paddleHeight/2 <= (ballVar.TransY+paddleWidth/2)) 
+    && paddleVar1.TransY + paddleHeight/2 >= (ballVar.TransY-paddleWidth/2)){
+      //nova direção da bola
+      ballVar.dx = (-1)*ballVar.dx;
+      //corrige erro
+      ballVar.TransX+=Math.sign(ballVar.dx)*8;
+      //slice
+    }
+  }
+  ///Checa colisoes paddle2
+  if(ballVar.TransX >= (gl.canvas.clientWidth/10)-(paddleWidth/2)){
+    if((paddleVar2.TransY - paddleHeight/2 <= (ballVar.TransY+paddleWidth/2)) 
+    && paddleVar2.TransY + paddleHeight/2 >= (ballVar.TransY-paddleWidth/2)){
+      //nova direção da bola
+      ballVar.dx = (-1)*ballVar.dx;
+      //corrige erro
+      ballVar.TransX+=Math.sign(ballVar.dx)*8;
+      //slice
+    }
+  }
+}
+function moveBall(){
+  ballVar.TransX+=ballVar.dx;
+  ballVar.TransY+=ballVar.dy;
 }
