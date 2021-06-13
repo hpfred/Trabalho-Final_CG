@@ -480,11 +480,13 @@ function runButtons(){
   })
 }
 
+var inMovement = false;
 function centerBall(){
   ballVar.TransX = gl.canvas.clientWidth/20;
   ballVar.TransY = gl.canvas.clientHeight/20;
   ballVar.dx = 0;
   ballVar.dy = 0;
+  inMovement = false;
 }
 function playBall(){
   //só quando jogo estiver parado
@@ -496,12 +498,14 @@ function playBall(){
       if(p2win)
       txt.fillText("Player 2 Wins", gl.canvas.clientWidth/10, gl.canvas.clientHeight/10);
   }
-  else{
-    ballVar.dx = -speed;  //aleatorizar pra que lado vai
-    ballVar.dy = speed;   //isso pode tirar se colocar o slice
+  else if(!inMovement){
+    inMovement=true;
+    ballVar.dx = speed*Math.sign(Math.random()-.5);//-speed;  //aleatorizar pra que lado vai
+    //ballVar.dy = speed;   //isso pode tirar se colocar o slice
   }
 }
 
+var slice = 6;
 function paddleColision(){
   ///Checa colisoes paddle1
   //verifica se chegou na linha de paddle
@@ -516,6 +520,12 @@ function paddleColision(){
       //corrige erro
       //ballVar.TransX+=Math.sign(ballVar.dx)*8;
       //slice
+      ballVar.dy = (ballVar.TransY-paddleVar1.TransY)/slice;
+      ///Teste pra deixar a velocidade mais constante, mas acaba criando um modo de jogo caotico (mas divertido :) )
+      // if(ballVar.dx>0)
+      //   ballVar.dx-=ballVar.dy = (ballVar.TransY-paddleVar1.TransY)/slice;
+      // if(ballVar.dx<0)
+      //   ballVar.dx+=ballVar.dy = (ballVar.TransY-paddleVar1.TransY)/slice;
     }
   }
   ///Checa colisoes paddle2
@@ -528,6 +538,12 @@ function paddleColision(){
       //corrige erro
       //ballVar.TransX+=Math.sign(ballVar.dx)*8;
       //slice
+      ballVar.dy = (ballVar.TransY-paddleVar2.TransY)/slice;
+      ///Modo de jogo caotico
+      // if(ballVar.dx>0)
+      //   ballVar.dx-=ballVar.dy = (ballVar.TransY-paddleVar1.TransY)/slice;
+      // if(ballVar.dx<0)
+      //   ballVar.dx+=ballVar.dy = (ballVar.TransY-paddleVar1.TransY)/slice;
     }
   }
 }

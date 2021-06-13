@@ -276,7 +276,8 @@ function main() {
     // textCanvas.height=Math.floor(150*window.devicePixelRatio);
     // txt.scale(window.devicePixelRatio,window.devicePixelRatio);
     txt.fillStyle = 'yellow';
-    txt.font ='10px arial';
+    //txt.font ='10px arial';
+    txt.font ='1.5vh arial';
     //txt.scale(2,2);
     // txt.Width=gl.canvas.clientWidth;
     // txt.height=gl.canvas.clientHeight;
