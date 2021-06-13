@@ -8,7 +8,7 @@ var speed = 0.5;
 var p1score = 0, p2score = 0;
 var inv = 1;
 
-const { gl, programInfo } = initializeWorld();
+const { gl, programInfo, txt } = initializeWorld();
 function main() {
   
   //const paddleBufferInfo = flattenedPrimitives.createCylinderBufferInfo(gl, paddleWidth/2, paddleHeight, 4, 1);
@@ -236,8 +236,22 @@ function main() {
      
     twgl.drawObjectList(gl, objectsToDraw);
 
+    //Imprime pontos
+    // printScore();
+    txt.clearRect(0, 0, txt.canvas.width, txt.canvas.height);
+    txt.fillStyle = 'white';
+    txt.font ='10px arial';
+    // txt.Width=gl.canvas.clientWidth;
+    // txt.height=gl.canvas.clientHeight;
+    //txt.fillText(p1score, gl.canvas.clientWidth/20 - 200, 10);
+    txt.fillText(p1score, 100,100);
+    // text1.textContent = p1score;
+    // text2.textContent = p2score;
+    //txt.fill(0,0,2,2);
+    
     ///Checa ponto
     if(ballVar.TransX+paddleWidth/2<=0){
+      console.log(txt);
       p1score++;
       centerBall();
       console.log(p1score);

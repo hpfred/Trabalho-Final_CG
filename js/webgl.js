@@ -34,9 +34,17 @@ void main() {
 }
 `;
 
+// var text1 = document.querySelector("#p1");
+// var text2 = document.querySelector("#p2");
+// var p1node = document.createTextNode("");
+// var p2node = document.createTextNode("");
+// text1.appendChild(p1node);
+// text2.appendChild(p2node);
 var initializeWorld = () => {
   var canvas = document.querySelector("#canvas");
   var gl = canvas.getContext("webgl2");
+  var textCanvas = document.querySelector("#text");
+  var txt = textCanvas.getContext("2d");
   if (!gl) {
     return;
   }
@@ -46,5 +54,6 @@ var initializeWorld = () => {
   return {
     gl,
     programInfo,
+    txt,
   };
 };

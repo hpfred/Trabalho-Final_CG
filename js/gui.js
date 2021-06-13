@@ -80,11 +80,6 @@ const loadGUI = () => {
   guiModRotAxis.add(paddleVar1, "rotateZ", 0, 100, 0.1).listen().name("Z Axis");
   guiModRot.add(paddleVar1, "rotateP", 0, 100, 0.1).listen().name("Point");
   guiMod.add(paddleVar1, "scale", 0, 100, 0.1).listen();  
-    ///Calls function that plays animation
-  guiMod.add(paddleVar1, "animate").name("Animate");
-    ///Calls function that creates and destroys new model new model
-  guiMod.add(paddleVar1, "addModel").name("Add Model");
-  guiMod.add(paddleVar1, "removeModel").name("Remove Model");
 
     ///Interface for camera transformations
   var guiCam = gui.addFolder("Camera");

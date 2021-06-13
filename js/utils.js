@@ -525,3 +525,12 @@ function moveBall(){
   ballVar.TransX+=ballVar.dx;
   ballVar.TransY+=ballVar.dy;
 }
+
+// function printScore(){
+//   txt.clearRect(0, 0, txt.canvas.width, txt.canvas.height);
+//     txt.fillStyle = 'white';
+//     //console.log((txt.canvas.clientHeight));
+//     txt.font = '48px serif';
+//     //txt.fillText(p1score, gl.canvas.clientWidth/20 - 200, 10);
+//     txt.fillText("Hellow World", 200,200);
+// }
