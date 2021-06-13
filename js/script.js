@@ -283,19 +283,42 @@ function main() {
     // txt.height=gl.canvas.clientHeight;
     txt.textAlign = "center";
     //txt.fillText(p1score, gl.canvas.clientWidth/10-50, 10);
-    txt.fillText(p1score, gl.canvas.clientWidth/10+gl.canvas.clientWidth/30, 10);
-    txt.fillText(p2score, gl.canvas.clientWidth/10-gl.canvas.clientWidth/30, 10);//+50, 10);
+    txt.fillText(p1score, gl.canvas.clientWidth/10+gl.canvas.clientWidth/30, 15);
+    txt.fillText(p2score, gl.canvas.clientWidth/10-gl.canvas.clientWidth/30, 15);//+50, 10);
     //txt.fillText(p2score, txt.canvas.width/10, 10);
     //txt.fillText(p1score, 50,50);
     // text1.textContent = p1score;
     // text2.textContent = p2score;
     //txt.fill(0,0,2,2);
+
+    function isReset(){
+      document.addEventListener('keydown',(e) => {
+      if(e.keyCode == 32)
+        resetGame();
+      });
+      requestAnimationFrame(isReset);
+    }
+    function resetGame(){
+      p1score=0;
+      p1win=false;
+      p2score=0;
+      p2win=false;
+      document.getElementById("canvas").style.backgroundColor = 'transparent';
+      console.log("reset");
+      requestAnimationFrame(render);
+    }
+
+    if(chaotic)
+      txt.fillText("c", gl.canvas.clientWidth/20, 15);
     
     if(p1win || p2win){
       if(p1win)
         txt.fillText("Player 1 Wins", gl.canvas.clientWidth/10, gl.canvas.clientHeight/10);
-        if(p2win)
+      if(p2win)
         txt.fillText("Player 2 Wins", gl.canvas.clientWidth/10, gl.canvas.clientHeight/10);
+
+      //ficar esperando apertar espaço para chamar funcao reseta jogo
+      //requestAnimationFrame(isReset);
     }
     else
 	requestAnimationFrame(render);

@@ -445,10 +445,13 @@ const controller = {
   38:  {pressed: false, func: moveUp2},
   40:  {pressed: false, func: moveDown2},
   32:  {pressed: false, func: playBall},
+  //67:  {pressed: false, func: chaoticMode},
 }
 const handleKeyDown = (e) => {
   if(controller[e.keyCode])
     controller[e.keyCode].pressed = true;
+  if(e.keyCode == 67)
+    chaoticMode();
 }
 const handleKeyUp = (e) => {
   if(controller[e.keyCode])
@@ -456,6 +459,10 @@ const handleKeyUp = (e) => {
 }
 document.addEventListener('keydown',handleKeyDown);
 document.addEventListener('keyup',handleKeyUp);
+// document.addEventListener('keydown', (e) => {
+//   if(e.keyCode == 67)
+//     chaoticMode();
+// })
 function moveUp1(){
   if(paddleVar1.TransY > paddleHeight/2)
     paddleVar1.TransY -= speed;
@@ -505,6 +512,27 @@ function playBall(){
   }
 }
 
+var chaotic = false;
+function chaoticMode(){
+  chaotic = !chaotic;
+}
+function isReset(){
+  document.addEventListener('keydown',(e) => {
+  if(e.keyCode == 32)
+    resetGame();
+  });
+  requestAnimationFrame(isReset);
+}
+function resetGame(){
+  p1score=0;
+  p1win=false;
+  p2score=0;
+  p2win=false;
+  document.getElementById("canvas").style.backgroundColor = 'transparent';
+  console.log("reset");
+  requestAnimationFrame(render);
+}
+
 var slice = 6;
 function paddleColision(){
   ///Checa colisoes paddle1
@@ -522,10 +550,10 @@ function paddleColision(){
       //slice
       ballVar.dy = (ballVar.TransY-paddleVar1.TransY)/slice;
       ///Teste pra deixar a velocidade mais constante, mas acaba criando um modo de jogo caotico (mas divertido :) )
-      // if(ballVar.dx>0)
-      //   ballVar.dx-=ballVar.dy = (ballVar.TransY-paddleVar1.TransY)/slice;
-      // if(ballVar.dx<0)
-      //   ballVar.dx+=ballVar.dy = (ballVar.TransY-paddleVar1.TransY)/slice;
+      if(ballVar.dx>0 && chaotic)
+        ballVar.dx-=ballVar.dy = (ballVar.TransY-paddleVar1.TransY)/slice;
+      if(ballVar.dx<0 && chaotic)
+        ballVar.dx+=ballVar.dy = (ballVar.TransY-paddleVar1.TransY)/slice;
     }
   }
   ///Checa colisoes paddle2
@@ -540,10 +568,10 @@ function paddleColision(){
       //slice
       ballVar.dy = (ballVar.TransY-paddleVar2.TransY)/slice;
       ///Modo de jogo caotico
-      // if(ballVar.dx>0)
-      //   ballVar.dx-=ballVar.dy = (ballVar.TransY-paddleVar1.TransY)/slice;
-      // if(ballVar.dx<0)
-      //   ballVar.dx+=ballVar.dy = (ballVar.TransY-paddleVar1.TransY)/slice;
+      if(ballVar.dx>0 && chaotic)
+        ballVar.dx-=ballVar.dy = (ballVar.TransY-paddleVar1.TransY)/slice;
+      if(ballVar.dx<0 && chaotic)
+        ballVar.dx+=ballVar.dy = (ballVar.TransY-paddleVar1.TransY)/slice;
     }
   }
 }
