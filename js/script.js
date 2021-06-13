@@ -7,6 +7,7 @@ var paddleWidth = 5;  //2.5
 var speed = 0.5;
 var p1score = 0, p2score = 0;
 var inv = 1;
+var p1win=false, p2win=false;
 
 const { gl, programInfo, txt } = initializeWorld();
 function main() {
@@ -85,10 +86,13 @@ function main() {
 
   // loadGUI();
   
+  canvas.height=gl.canvas.clientHeight/20;
+  canvas.width=gl.canvas.clientWidth/20;
+
   paddleVar1.TransX = paddleWidth/2;
-  paddleVar1.TransY = paddleHeight/2;
+  paddleVar1.TransY = gl.canvas.clientHeight/20;//paddleHeight/2;
   paddleVar2.TransX = (gl.canvas.clientWidth/10)-(paddleWidth/2);//138.2;//gl.canvas.clientWidth/10;
-  paddleVar2.TransY = paddleHeight/2;
+  paddleVar2.TransY = gl.canvas.clientHeight/20;//paddleHeight/2;
   // ballVar.TransX = gl.canvas.clientWidth/20;
   // ballVar.TransY = gl.canvas.clientHeight/20;
   centerBall();
@@ -236,31 +240,63 @@ function main() {
      
     twgl.drawObjectList(gl, objectsToDraw);
 
-    //Imprime pontos
-    // printScore();
-    txt.clearRect(0, 0, txt.canvas.width, txt.canvas.height);
-    txt.fillStyle = 'white';
-    txt.font ='10px arial';
-    // txt.Width=gl.canvas.clientWidth;
-    // txt.height=gl.canvas.clientHeight;
-    //txt.fillText(p1score, gl.canvas.clientWidth/20 - 200, 10);
-    txt.fillText(p1score, 100,100);
-    // text1.textContent = p1score;
-    // text2.textContent = p2score;
-    //txt.fill(0,0,2,2);
-    
     ///Checa ponto
     if(ballVar.TransX+paddleWidth/2<=0){
       console.log(txt);
       p1score++;
       centerBall();
       console.log(p1score);
+      if(p1score-p2score >= 5 || p1score>=10){
+        //
+        p1win=true;
+        document.getElementById("canvas").style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        //txt.fillText("Player 1 Wins", gl.canvas.clientWidth/10, gl.canvas.clientHeight/10);
+        console.log("P1 vencedor");
+      }
     } 
     if(ballVar.TransX-paddleWidth/2>=gl.canvas.clientWidth/10){
       p2score++;
       centerBall();
       console.log(p2score);
+      if(p2score-p1score >= 5 || p2score>=10){
+        //
+        document.getElementById("canvas").style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        p2win=true;
+        console.log("P2 vencedor");
+      }
     }
+
+    //Imprime pontos
+    // printScore();
+    txt.clearRect(0, 0, txt.canvas.width, txt.canvas.height);
+    // window.devicePixelRatio=2;
+    // textCanvas.style.width=150;
+    // textCanvas.style.height=150;
+    // textCanvas.width=Math.floor(150*window.devicePixelRatio);
+    // textCanvas.height=Math.floor(150*window.devicePixelRatio);
+    // txt.scale(window.devicePixelRatio,window.devicePixelRatio);
+    txt.fillStyle = 'yellow';
+    txt.font ='10px arial';
+    //txt.scale(2,2);
+    // txt.Width=gl.canvas.clientWidth;
+    // txt.height=gl.canvas.clientHeight;
+    txt.textAlign = "center";
+    //txt.fillText(p1score, gl.canvas.clientWidth/10-50, 10);
+    txt.fillText(p1score, gl.canvas.clientWidth/10+gl.canvas.clientWidth/30, 10);
+    txt.fillText(p2score, gl.canvas.clientWidth/10-gl.canvas.clientWidth/30, 10);//+50, 10);
+    //txt.fillText(p2score, txt.canvas.width/10, 10);
+    //txt.fillText(p1score, 50,50);
+    // text1.textContent = p1score;
+    // text2.textContent = p2score;
+    //txt.fill(0,0,2,2);
+    
+    if(p1win || p2win){
+      if(p1win)
+        txt.fillText("Player 1 Wins", gl.canvas.clientWidth/10, gl.canvas.clientHeight/10);
+        if(p2win)
+        txt.fillText("Player 2 Wins", gl.canvas.clientWidth/10, gl.canvas.clientHeight/10);
+    }
+    else
 	requestAnimationFrame(render);
   }
 

@@ -488,8 +488,18 @@ function centerBall(){
 }
 function playBall(){
   //só quando jogo estiver parado
-  ballVar.dx = -speed;
-  ballVar.dy = speed;
+  //só quando jogo nao tiver terminado
+  if(p1win || p2win){
+    document.getElementById("canvas").style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    if(p1win)
+      txt.fillText("Player 1 Wins", gl.canvas.clientWidth/10, gl.canvas.clientHeight/10);
+      if(p2win)
+      txt.fillText("Player 2 Wins", gl.canvas.clientWidth/10, gl.canvas.clientHeight/10);
+  }
+  else{
+    ballVar.dx = -speed;  //aleatorizar pra que lado vai
+    ballVar.dy = speed;   //isso pode tirar se colocar o slice
+  }
 }
 
 function paddleColision(){
@@ -525,6 +535,26 @@ function moveBall(){
   ballVar.TransX+=ballVar.dx;
   ballVar.TransY+=ballVar.dy;
 }
+
+// function printScore(){
+//   txt.clearRect(0, 0, txt.canvas.width, txt.canvas.height);
+//   // window.devicePixelRatio=2;
+//   // textCanvas.style.width=150;
+//   // textCanvas.style.height=150;
+//   // textCanvas.width=Math.floor(150*window.devicePixelRatio);
+//   // textCanvas.height=Math.floor(150*window.devicePixelRatio);
+//   // txt.scale(window.devicePixelRatio,window.devicePixelRatio);
+//   txt.fillStyle = 'white';
+//   txt.font ='1px arial';
+//   txt.scale(2,2);
+//   // txt.Width=gl.canvas.clientWidth;
+//   // txt.height=gl.canvas.clientHeight;
+//   //txt.fillText(p1score, gl.canvas.clientWidth/20 - 200, 10);
+//   txt.fillText(p1score, 1,1);
+//   // text1.textContent = p1score;
+//   // text2.textContent = p2score;
+//   //txt.fill(0,0,2,2);
+// }
 
 // function printScore(){
 //   txt.clearRect(0, 0, txt.canvas.width, txt.canvas.height);
