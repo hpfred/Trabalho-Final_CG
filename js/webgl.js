@@ -45,6 +45,17 @@ var initializeWorld = () => {
   var gl = canvas.getContext("webgl2");
   var textCanvas = document.querySelector("#text");
   var txt = textCanvas.getContext("2d");
+
+  var width = document.documentElement.clientWidth;
+  var height = document.documentElement.clientHeight
+  canvas.width = width;
+  canvas.height = height;
+  textCanvas.width = width;
+  textCanvas.height = height;
+
+  txt.fillStyle = 'white';
+  txt.font = '30px arial';
+
   if (!gl) {
     return;
   }
